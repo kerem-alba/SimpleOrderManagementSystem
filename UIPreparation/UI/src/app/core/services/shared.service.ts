@@ -1,18 +1,19 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs/Rx';
+import { Subject } from 'rxjs';
+import { Observable } from "rxjs/internal/Observable";
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class SharedService {
-  private subject = new Subject<any>();
+    private subject = new Subject<any>();
 
-  sendChangeUserNameEvent(){
-    this.subject.next();
+    sendChangeUserNameEvent() {
+        //this.subject.next();
 
-  }
-  getChangeUserNameClickEvent():Observable<any>{
-    return this.subject.asObservable();
- }
+    }
+    getChangeUserNameClickEvent(): Observable<any> {
+        return this.subject.asObservable();
+    }
 
 }

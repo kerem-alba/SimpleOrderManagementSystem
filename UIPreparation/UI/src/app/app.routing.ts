@@ -20,7 +20,7 @@ const routes: Routes =[
     children: [{
       path: '',
       // loadChildren: './core/components/app/layouts/admin-layout/admin-layout.module#AdminLayoutModule'
-      loadChildren: './core/modules/admin-layout.module#AdminLayoutModule'
+        loadChildren: () => import('./core/modules/admin-layout.module').then(m => m.AdminLayoutModule)
     }]
   }
 ];

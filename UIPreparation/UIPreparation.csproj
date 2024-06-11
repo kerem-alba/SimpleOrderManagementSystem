@@ -20,5 +20,9 @@
   <ItemGroup>
     <Folder Include="UI\src\assets\i18n\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="datatables.net" Version="2.0.8" />
+  </ItemGroup>
 	
 </Project>

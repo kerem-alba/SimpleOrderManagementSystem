@@ -6,22 +6,22 @@ import { tap } from 'rxjs/operators';
 import { AuthService } from './auth.service';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class TokenService {
 
-constructor(private httpClient:HttpClient,private storageService:LocalStorageService) { }
+    constructor(private httpClient: HttpClient, private storageService: LocalStorageService) { }
 
-refreshToken(){
-  if(this.storageService.getItem("refreshToken") !== null)
-  return this.httpClient
-      .post<any>(environment.getApiUrl + "/Auth/refresh-token",{refreshToken:this.storageService.getItem("refreshToken")})
-      .pipe(tap(res => {
-        if(res.success){
-          this.storageService.setToken(res.data.token);
-          this.storageService.setItem("refreshToken",res.data.refreshToken);
-        }
-    }));
-}
+    refreshToken() {
+        if (this.storageService.getItem("refreshToken") !== null)
+            return this.httpClient
+                .post<any>(environment.getApiUrl + "/Auth/refresh-token", { refreshToken: this.storageService.getItem("refreshToken") })
+                .pipe(tap(res => {
+                    if (res.success) {
+                        this.storageService.setToken(res.data.token);
+                        this.storageService.setItem("refreshToken", res.data.refreshToken);
+                    }
+                }));
+    }
 
 }

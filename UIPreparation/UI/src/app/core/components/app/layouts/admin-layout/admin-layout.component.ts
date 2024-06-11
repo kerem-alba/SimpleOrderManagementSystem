@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Location, LocationStrategy, PathLocationStrategy, PopStateEvent } from '@angular/common';
-import 'rxjs/add/operator/filter';
 import { Router, NavigationEnd, NavigationStart } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import PerfectScrollbar from 'perfect-scrollbar';
 import * as $ from "jquery";
 import { AuthService } from 'app/core/components/admin/login/services/auth.service';
 import { TranslateService } from '@ngx-translate/core';
+import { filter } from 'rxjs/operators';
 
 
 @Component({
@@ -20,10 +20,10 @@ export class AdminLayoutComponent implements OnInit {
     private yScrollStack: number[] = [];
 
 
-    constructor(public location: Location, private router: Router, private authService: AuthService ,public translate: TranslateService ) {
-               
-            this.translate.setDefaultLang("tr-TR");
-            this.translate.use('tr-TR')         
+    constructor(public location: Location, private router: Router, private authService: AuthService, public translate: TranslateService) {
+
+        this.translate.setDefaultLang("tr-TR");
+        this.translate.use('tr-TR')
     }
 
     isLoggedIn(): boolean {
@@ -32,9 +32,9 @@ export class AdminLayoutComponent implements OnInit {
     }
 
     ngOnInit() {
-            this.translate.use('tr-TR')  
+        this.translate.use('tr-TR')
 
-            
+
         if (this.isLoggedIn()) {
             const isWindows = navigator.platform.indexOf('Win') > -1 ? true : false;
 
@@ -63,14 +63,14 @@ export class AdminLayoutComponent implements OnInit {
                         window.scrollTo(0, 0);
                 }
             });
-            this._router = this.router.events.filter(event => event instanceof NavigationEnd).subscribe((event: NavigationEnd) => {
+            this._router = this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((event: NavigationEnd) => {
                 elemMainPanel.scrollTop = 0;
                 elemSidebar.scrollTop = 0;
             });
-             if (window.matchMedia(`(min-width: 960px)`).matches && !this.isMac()) {
-                 let ps = new PerfectScrollbar(elemMainPanel);
-                 ps = new PerfectScrollbar(elemSidebar);
-             }
+            if (window.matchMedia(`(min-width: 960px)`).matches && !this.isMac()) {
+                let ps = new PerfectScrollbar(elemMainPanel);
+                ps = new PerfectScrollbar(elemSidebar);
+            }
 
             const window_width = $(window).width();
             let $sidebar = $('.sidebar');

@@ -10,7 +10,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { ComponentsModule } from './core/modules/components.module';
 import { AdminLayoutComponent } from './core/components/app/layouts/admin-layout/admin-layout.component';
-import { TranslationService } from './core/services/translation.service';
+import { TranslationService } from './core/services/Translation.service';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { LoginGuard } from './core/guards/login-guard';
 import { AuthInterceptorService } from './core/interceptors/auth-interceptor.service';
