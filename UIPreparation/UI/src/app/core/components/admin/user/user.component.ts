@@ -59,6 +59,7 @@ export class UserComponent implements AfterViewInit, OnInit {
     isClaimChange: boolean = false;
 
     userId: number;
+    Filter: string = '';
 
     constructor(
         private userService: UserService,
@@ -289,4 +290,6 @@ export class UserComponent implements AfterViewInit, OnInit {
             this.dataSource.paginator.firstPage();
         }
     }
+
+
 }

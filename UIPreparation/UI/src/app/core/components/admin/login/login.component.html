@@ -1,5 +1,5 @@
-<div class="main-content ">
-  <div class="container-fluid align-middle">
+
+  <div class="container">
     <div class="row">
       <div class="col-md-3 " ></div>
       <div class="col-md-4 ">
@@ -11,14 +11,14 @@
           <div class="card-body">
             <form (submit)="login()">
               <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-12 d-grid">
                   <mat-form-field class="example-full-width">
                     <input matInput placeholder="{{'Email' | translate}}"  name="email" [(ngModel)]="loginUser.email">
                   </mat-form-field>
                 </div>
               </div>
               <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-12 d-grid">
                   <mat-form-field class="example-full-width">
                     <input matInput placeholder="{{'Password' | translate}}" type="password"  name="password" [(ngModel)]="loginUser.password">
                   </mat-form-field>
@@ -26,7 +26,8 @@
               </div>
               <div class="row">
                 <div class="col-md-12">
-                  <select class="browser-default custom-select" placeholder="Seçiniz" name="lang" [(ngModel)]="loginUser.lang" (change)="changeLang($event.target.value)">
+                  <select class="browser-default custom-select" name="lang" [(ngModel)]="loginUser.lang" (change)="changeLang($event.target.value)">
+                    <option value ="" disabled selected>Seçiniz</option> 
                     <option *ngFor="let item of langugelookUp" [value]="item.id"> {{item.label}}</option>
                   </select>
                 </div>
@@ -40,4 +41,4 @@
       <div class="col-md-5" ></div>
     </div>
   </div>
-</div>
+

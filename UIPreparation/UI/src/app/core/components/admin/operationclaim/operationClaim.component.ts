@@ -30,6 +30,7 @@ export class OperationClaimComponent implements AfterViewInit, OnInit {
     operationClaimAddForm: FormGroup;
 
     operationClaimId: number;
+    Filter: string = '';
 
     constructor(private operationClaimService: OperationClaimService, private lookupService: LookUpService, private alertifyService: AlertifyService, private formBuilder: FormBuilder, private authService: AuthService) { }
     ngAfterViewInit(): void {
