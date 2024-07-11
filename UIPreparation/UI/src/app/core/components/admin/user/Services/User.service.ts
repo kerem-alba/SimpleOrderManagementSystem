@@ -27,8 +27,8 @@ export class UserService {
 
 
   addUser(user: User): Observable<any> {
-
-    var result = this.httpClient.post(environment.getApiUrl + "/users/", user, { responseType: 'text' });
+console.log(user)
+    var result = this.httpClient.post(environment.getApiUrl + "/users/", {UserDto:user}, { responseType: 'text' });
     return result;
   }
 

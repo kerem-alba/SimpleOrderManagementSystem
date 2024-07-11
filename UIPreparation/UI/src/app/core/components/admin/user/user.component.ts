@@ -167,7 +167,6 @@ export class UserComponent implements AfterViewInit, OnInit {
             fullName: ["", Validators.required],
             email: ["", Validators.required],
             address: [""],
-            notes: [""],
             mobilePhones: [""],
             status: [true],
         });

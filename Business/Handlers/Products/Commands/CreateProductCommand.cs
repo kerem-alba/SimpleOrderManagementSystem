@@ -61,7 +61,7 @@ namespace Business.Handlers.Products.Commands
                     CreatedDate = DateTime.Now,
                     LastUpdatedUserId = userId,
                     LastUpdatedDate = DateTime.Now,
-                    Status = false,
+                    Status = true,
                     IsDeleted = false,
                     Name = request.Product.Name,
                     ColorId = request.Product.ColorId,

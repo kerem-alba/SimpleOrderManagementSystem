@@ -8,8 +8,7 @@ import { TranslateComponent } from 'app/core/components/admin/translate/translat
 import { UserComponent } from 'app/core/components/admin/user/user.component';
 import { LoginGuard } from 'app/core/guards/login-guard';
 import { DashboardComponent } from '../../dashboard/dashboard.component';
-
-
+import { ProductComponent } from '../../product/product.component';
 
 
 
@@ -22,6 +21,7 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'language',       component: LanguageComponent,canActivate:[LoginGuard]},
     { path: 'translate',      component: TranslateComponent,canActivate:[LoginGuard]},
     { path: 'operationclaim', component: OperationClaimComponent,canActivate:[LoginGuard]},
-    { path: 'log',            component: LogDtoComponent,canActivate:[LoginGuard]}
+    { path: 'log',            component: LogDtoComponent,canActivate:[LoginGuard]},
+    { path: "product",        component: ProductComponent, canActivate:[LoginGuard] },
     
 ];

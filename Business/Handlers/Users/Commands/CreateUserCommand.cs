@@ -41,7 +41,6 @@ namespace Business.Handlers.Users.Commands
                     return new ErrorResult(Messages.NameAlreadyExist);
                 }
 
-                HashingHelper.CreatePasswordHash(request.UserDto.Password, out var passwordSalt, out var passwordHash);
 
                 var user = new User
                 {
@@ -49,16 +48,14 @@ namespace Business.Handlers.Users.Commands
                     FullName = request.UserDto.FullName,
                     Gender = request.UserDto.Gender,
                     MobilePhones = request.UserDto.MobilePhones,
-                    Status = false,
+                    Status = true,
                     IsDeleted = false,
-                    PasswordHash = passwordHash,
-                    PasswordSalt = passwordSalt,
-            };
+                };
 
-            _userRepository.Add(user);
+                _userRepository.Add(user);
                 await _userRepository.SaveChangesAsync();
                 return new SuccessResult(Messages.Added);
+            }
         }
     }
-}
 }

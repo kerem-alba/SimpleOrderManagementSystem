@@ -14,7 +14,7 @@ namespace WebAPI.Controllers
     /// If controller methods will not be Authorize, [AllowAnonymous] is used.
     /// </summary>
     ///
-    [Route("api/v{version:apiVersion}/operation-claims")]
+    [Route("api/operation-claims")]
     [ApiController]
     public class OperationClaimsController : BaseApiController
     {

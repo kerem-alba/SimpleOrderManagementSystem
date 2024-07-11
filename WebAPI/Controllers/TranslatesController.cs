@@ -13,7 +13,7 @@ namespace WebAPI.Controllers
     /// <summary>
     /// If controller methods will not be Authorize, [AllowAnonymous] is used.
     /// </summary>
-    [Route("api/v{version:apiVersion}/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class TranslatesController : BaseApiController
     {

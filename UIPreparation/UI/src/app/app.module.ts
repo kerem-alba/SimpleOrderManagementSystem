@@ -15,6 +15,14 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { LoginGuard } from './core/guards/login-guard';
 import { AuthInterceptorService } from './core/interceptors/auth-interceptor.service';
 import { HttpEntityRepositoryService } from './core/services/http-entity-repository.service';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconButton } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { ProductAddDialogComponent } from './core/components/app/product/dialog/product-add-dialog/product-add-dialog.component';
+import { MatFormField, MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import { ProductUpdateDialogComponent } from './core/components/app/product/dialog/product-update-dialog/product-update-dialog.component';
 
 
 // i18 kullanıclak ise aşağıdaki metod aktif edilecek
@@ -39,7 +47,10 @@ export function tokenGetter() {
     HttpClientModule,
     ComponentsModule,
     RouterModule,
+    MatDialogModule,
     AppRoutingModule,
+    MatIconButton,
+    MatIconModule,
     NgMultiSelectDropDownModule.forRoot(),
     SweetAlert2Module.forRoot(),
     NgbModule,
@@ -51,12 +62,18 @@ export function tokenGetter() {
         deps: [HttpClient]
       }
 
-    })
+    }),
+    MatSelectModule,
+    MatFormFieldModule,
+    BrowserAnimationsModule,
+    MatInputModule,
 
   ],
   declarations: [
     AppComponent,
-    AdminLayoutComponent
+    AdminLayoutComponent,
+    ProductAddDialogComponent,
+    ProductUpdateDialogComponent,
   ],
 
   providers: [

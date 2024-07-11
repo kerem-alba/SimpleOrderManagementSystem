@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Core.Entities.Concrete;
 using Core.Entities.Dtos;
+using Entities.Dtos;
 
 namespace Business.Helpers
 {
@@ -9,6 +10,7 @@ namespace Business.Helpers
         public AutoMapperHelper()
         {
             CreateMap<User, CreateUserDto>().ReverseMap();
+            CreateMap<User, GetUserDto>().ReverseMap();
         }
     }
 }

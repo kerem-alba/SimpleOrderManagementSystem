@@ -12,7 +12,7 @@ namespace WebAPI.Controllers
     /// <summary>
     /// If controller methods will not be Authorize, [AllowAnonymous] is used.
     /// </summary>
-    [Route("api/v{version:apiVersion}/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class UsersController : BaseApiController
     {
@@ -88,7 +88,10 @@ namespace WebAPI.Controllers
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] UpdateUserDto updateUserDto)
         {
-            return GetResponseOnlyResultMessage(await Mediator.Send(new UpdateUserCommand { UserId = updateUserDto.UserId, Email = updateUserDto.Email, FullName = updateUserDto.FullName, MobilePhones = updateUserDto.MobilePhones, Address = updateUserDto.Address, Notes = updateUserDto.Notes }));
+            return GetResponseOnlyResultMessage(await Mediator.Send(new UpdateUserCommand
+            {
+                UpdateUserDto = updateUserDto
+            }));
         }
 
         /// <summary>

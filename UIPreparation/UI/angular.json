@@ -28,7 +28,7 @@
               "node_modules/alertifyjs/build/css/themes/bootstrap.min.css",
               "node_modules/perfect-scrollbar/css/perfect-scrollbar.css",
               "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
-              "node_modules/bootstrap-select/dist/css/bootstrap-select.min.css",
+              "node_modules/bootstrap-select/dist/css/bootstrap-select.min.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.js",

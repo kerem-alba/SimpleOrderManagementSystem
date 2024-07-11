@@ -7,6 +7,7 @@ using Core.CrossCuttingConcerns.Logging.Serilog.Loggers;
 using Core.Entities.Dtos;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
+using Entities.Dtos;
 using MediatR;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +16,9 @@ using System.Threading.Tasks;
 
 namespace Business.Handlers.Users.Queries
 {
-    public class GetUsersQuery : IRequest<IDataResult<IEnumerable<CreateUserDto>>>
+    public class GetUsersQuery : IRequest<IDataResult<IEnumerable<GetUserDto>>>
     {
-        public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, IDataResult<IEnumerable<CreateUserDto>>>
+        public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, IDataResult<IEnumerable<GetUserDto>>>
         {
             private readonly IUserRepository _userRepository;
             private readonly IMapper _mapper;
@@ -32,12 +33,12 @@ namespace Business.Handlers.Users.Queries
             [PerformanceAspect(5)]
             [CacheAspect(10)]
             [LogAspect(typeof(FileLogger))]
-            public async Task<IDataResult<IEnumerable<CreateUserDto>>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
+            public async Task<IDataResult<IEnumerable<GetUserDto>>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
             {
                 var userList = await _userRepository.GetListAsync();
-                var userDtoList = userList.Select(user => _mapper.Map<CreateUserDto>(user)).ToList();
+                var userDtoList = userList.Select(user => _mapper.Map<GetUserDto>(user)).ToList();
 
-                return new SuccessDataResult<IEnumerable<CreateUserDto>>(userDtoList);
+                return new SuccessDataResult<IEnumerable<GetUserDto>>(userDtoList);
             }
         }
     }

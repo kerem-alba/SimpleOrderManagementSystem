@@ -9,6 +9,7 @@ using DataAccess.Abstract;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
+using DataAccess.Concrete.EntityFramework;
 
 
 namespace Business.Handlers.Products.Commands
@@ -38,7 +39,8 @@ namespace Business.Handlers.Products.Commands
             {
                 var productToDelete = _productRepository.Get(p => p.Id == request.Id);
 
-                _productRepository.Delete(productToDelete);
+                productToDelete.Status = false;
+                _productRepository.Update(productToDelete);
                 await _productRepository.SaveChangesAsync();
                 return new SuccessResult(Messages.Deleted);
             }

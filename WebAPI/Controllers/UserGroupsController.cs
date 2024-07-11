@@ -15,7 +15,7 @@ namespace WebAPI.Controllers
     /// If controller methods will not be Authorize, [AllowAnonymous] is used.
     /// </summary>
     ///
-    [Route("api/v{version:apiVersion}/user-groups")]
+    [Route("api/user-groups")]
     [ApiController]
     public class UserGroupsController : BaseApiController
     {

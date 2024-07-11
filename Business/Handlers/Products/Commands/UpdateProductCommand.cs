@@ -22,12 +22,6 @@ namespace Business.Handlers.Products.Commands
     public class UpdateProductCommand : IRequest<IResult>
     {
         public int Id { get; set; }
-        public int CreatedUserId { get; set; }
-        public System.DateTime CreatedDate { get; set; }
-        public int LastUpdatedUserId { get; set; }
-        public System.DateTime LastUpdatedDate { get; set; }
-        public bool Status { get; set; }
-        public bool IsDeleted { get; set; }
         public string Name { get; set; }
         public int ColorId { get; set; }
         public Core.Enums.SizeEnum Size { get; set; }
@@ -52,12 +46,8 @@ namespace Business.Handlers.Products.Commands
                 var isThereProductRecord = await _productRepository.GetAsync(u => u.Id == request.Id);
 
 
-                isThereProductRecord.CreatedUserId = request.CreatedUserId;
-                isThereProductRecord.CreatedDate = request.CreatedDate;
-                isThereProductRecord.LastUpdatedUserId = request.LastUpdatedUserId;
-                isThereProductRecord.LastUpdatedDate = request.LastUpdatedDate;
-                isThereProductRecord.Status = request.Status;
-                isThereProductRecord.IsDeleted = request.IsDeleted;
+                isThereProductRecord.LastUpdatedUserId = 1;
+                isThereProductRecord.LastUpdatedDate = System.DateTime.Now;
                 isThereProductRecord.Name = request.Name;
                 isThereProductRecord.ColorId = request.ColorId;
                 isThereProductRecord.Size = request.Size;

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Entities.Concrete;
 using System.Collections.Generic;
+using System;
 
 namespace WebAPI.Controllers
 {
@@ -68,12 +69,25 @@ namespace WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] CreateProductCommand createProduct)
         {
-            var result = await Mediator.Send(createProduct);
-            if (result.Success)
+            try
             {
-                return Ok(result.Message);
+                if (createProduct == null || createProduct.Product == null)
+                {
+                    return BadRequest("Invalid product data.");
+                }
+
+                var result = await Mediator.Send(createProduct);
+                if (result.Success)
+                {
+                    return Ok(result.Message);
+                }
+                return BadRequest(result.Message);
             }
-            return BadRequest(result.Message);
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         /// <summary>
@@ -98,15 +112,15 @@ namespace WebAPI.Controllers
         /// <summary>
         /// Delete Product.
         /// </summary>
-        /// <param name="deleteProduct"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
         [Produces("application/json", "text/plain")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-        [HttpDelete]
-        public async Task<IActionResult> Delete([FromBody] DeleteProductCommand deleteProduct)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            var result = await Mediator.Send(deleteProduct);
+            var result = await Mediator.Send((new DeleteProductCommand { Id = id }));
             if (result.Success)
             {
                 return Ok(result.Message);

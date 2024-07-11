@@ -16,7 +16,7 @@ namespace WebAPI.Controllers
     /// <summary>
     /// Make it Authorization operations
     /// </summary>
-    [Route("api/v{version:apiVersion}/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class AuthController : BaseApiController
     {

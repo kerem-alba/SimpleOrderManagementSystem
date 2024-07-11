@@ -1,0 +1,1 @@
+{"ast":null,"code":"export var Size = /*#__PURE__*/function (Size) {\n  Size[Size[\"S\"] = 1] = \"S\";\n  Size[Size[\"M\"] = 2] = \"M\";\n  Size[Size[\"L\"] = 3] = \"L\";\n  Size[Size[\"XL\"] = 4] = \"XL\";\n  return Size;\n}(Size || {});","map":null,"metadata":{},"sourceType":"module","externalDependencies":[]}
