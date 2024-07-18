@@ -24,7 +24,8 @@ export const ADMINROUTES: RouteInfo[] = [
 
 export const USERROUTES: RouteInfo[] = [ 
   { path: '/product', title: 'Products', icon: 'store', class: '', claim: "GetProductsQuery" },
-  { path: '/customer', title: 'Customers', icon: 'group', class: '', claim: "GetCustomersQuery" }
+  { path: '/customer', title: 'Customers', icon: 'group', class: '', claim: "GetCustomersQuery" },
+  { path: '/order', title: 'Orders', icon: 'shopping_cart', class: '', claim: "GetOrdersQuery" },
 ];
 
 @Component({
