@@ -9,6 +9,7 @@ import { UserComponent } from 'app/core/components/admin/user/user.component';
 import { LoginGuard } from 'app/core/guards/login-guard';
 import { DashboardComponent } from '../../dashboard/dashboard.component';
 import { ProductComponent } from '../../product/product.component';
+import { CustomerComponent } from '../../customer/customer.component';
 
 
 
@@ -23,5 +24,6 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'operationclaim', component: OperationClaimComponent,canActivate:[LoginGuard]},
     { path: 'log',            component: LogDtoComponent,canActivate:[LoginGuard]},
     { path: "product",        component: ProductComponent, canActivate:[LoginGuard] },
+    { path: "customer",       component: CustomerComponent, canActivate:[LoginGuard] }
     
 ];

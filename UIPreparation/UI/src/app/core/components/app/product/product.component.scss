@@ -26,3 +26,61 @@
     display: none !important;
     background-image: url("https://picsum.photos/200") !important;
 }
+
+.product-card {
+    max-width: 400px;
+    min-width:fit-content;
+  }
+  
+  .product-card-footer {
+    padding: 24px;
+  }
+
+  .product-button-row {
+    display: table-cell;
+    max-width: 600px;
+  }
+  
+  .product-button-row .mat-mdc-button-base {
+    margin: 8px 8px 8px 0;
+  }
+  
+  .actions-flex-container {
+    display: flex;
+    justify-content: flex-start; 
+    gap: 10px;
+  }
+  
+  .actions-button-container {
+    display: flex;
+    justify-content: center;
+    width: 120px;
+  }
+  
+  .action-button {
+    font-size: 12px; 
+    padding: 0 12px;
+  }
+  
+  .action-button mat-icon {
+    font-size: 24px; 
+  }
+  
+  #edit-button {
+    background-color: #2196f3; 
+    color: white; 
+  }
+  
+  #edit-button:hover {
+    background-color: #1976d2; 
+  }
+  
+  #delete-button {
+    background-color: #f44336; 
+    color: white; 
+  }
+  
+  #delete-button:hover {
+    background-color: #d32f2f; 
+  }
+  

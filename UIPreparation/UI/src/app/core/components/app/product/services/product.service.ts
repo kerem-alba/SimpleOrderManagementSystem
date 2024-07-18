@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Product } from '../models/Product';
@@ -19,8 +19,8 @@ export class ProductService {
   }
 
   getProductById(id: number): Observable<Product> {
-
-    return this.httpClient.get<Product>(environment.getApiUrl + `/products/${id}`);
+    const params = new HttpParams().set('id', id.toString());
+    return this.httpClient.get<Product>(environment.getApiUrl + `/products/getbyid`, { params });
   }
 
 
@@ -32,7 +32,7 @@ export class ProductService {
   }
 
   updateProduct(product:Product):Observable<any> {
-    var result = this.httpClient.put(environment.getApiUrl + `/products/${product.id}`, product, { responseType: 'text' });
+    var result = this.httpClient.put(environment.getApiUrl + `/products/`, product, { responseType: 'text' });
     return result;
   }
 

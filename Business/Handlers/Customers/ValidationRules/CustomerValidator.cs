@@ -24,8 +24,6 @@ namespace Business.Handlers.Customers.ValidationRules
             RuleFor(x => x.Customer.PhoneNumber).NotEmpty();
             RuleFor(x => x.Customer.Email).NotEmpty();
             RuleFor(x => x.Customer.CustomerName).NotEmpty();
-            RuleFor(x => x.Customer.CreatedUserId).NotEmpty();
-
         }
     }
 }

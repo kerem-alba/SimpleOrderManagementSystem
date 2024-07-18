@@ -2154,8 +2154,7 @@ namespace DataAccess.Migrations.Ms
                         .HasColumnType("nvarchar(30)");
 
                     b.Property<string>("Notes")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("PasswordHash")
                         .HasColumnType("varbinary(max)");
@@ -2176,8 +2175,6 @@ namespace DataAccess.Migrations.Ms
                         .HasColumnType("datetime2");
 
                     b.HasKey("UserId");
-
-                    b.HasIndex("CitizenId");
 
                     b.HasIndex("MobilePhones");
 

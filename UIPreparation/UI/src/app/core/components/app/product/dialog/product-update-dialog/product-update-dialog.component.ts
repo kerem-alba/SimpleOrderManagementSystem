@@ -34,8 +34,13 @@ export class ProductUpdateDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    console.log('Dialog data:', this.data);  // Debug log
     this.createProductUpdateForm();
-    this.getProductById(this.data.id);
+    if (this.data && this.data.id) {
+      this.getProductById(this.data.id);
+    } else {
+      console.error('Dialog data id is invalid');
+    }
   }
 
   createProductUpdateForm() {
@@ -50,10 +55,10 @@ export class ProductUpdateDialogComponent implements OnInit {
 
   getProductById(id: number) {
     this.productService.getProductById(id).subscribe(
-      (product: Product | null) => {
+      (product: Product) => {
         if (product) {
           console.log('Product fetched successfully', product);  // Debug log
-          this.productUpdateForm.patchValue({
+          this.productUpdateForm.setValue({
             id: product.id,
             name: product.name,
             size: product.size,
@@ -73,6 +78,7 @@ export class ProductUpdateDialogComponent implements OnInit {
   save() {
     if (this.productUpdateForm.valid) {
       const updatedProduct: Product = { ...this.productUpdateForm.value };
+      console.log('Updated product:', updatedProduct);  // Debug log
 
       this.productService.updateProduct(updatedProduct).subscribe(
         data => {

@@ -1,7 +1,6 @@
 import {
   AfterViewInit,
   Component,
-  ElementRef,
   OnInit,
   ViewChild,
 } from "@angular/core";
@@ -42,6 +41,15 @@ import { Size } from "./models/size.enum";
 import { ProductAddDialogComponent } from "./dialog/product-add-dialog/product-add-dialog.component";
 import { ProductUpdateDialogComponent } from "./dialog/product-update-dialog/product-update-dialog.component";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatCardModule } from '@angular/material/card';
+import {MatChipsModule} from '@angular/material/chips';
+import {MatDividerModule} from '@angular/material/divider';
+import { MatIconModule } from "@angular/material/icon";
+
+
+
+
 
 
 @Component({
@@ -68,6 +76,13 @@ import { MatDialog, MatDialogModule } from "@angular/material/dialog";
     TranslateModule,
     MatDialogModule,
     MatIconButton,
+    MatSortModule,
+    MatTableModule,
+    MatGridListModule,
+    MatCardModule,
+    MatChipsModule,
+    MatDividerModule,
+    MatIconModule
   ],
 
         
@@ -121,15 +136,18 @@ export class ProductComponent implements AfterViewInit, OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      this.getProductList(); // Listesi güncelle
     });
   }
 
-  ProductUpdateDialog(): void {
+  ProductUpdateDialog(productId: number): void {
     const dialogRef = this.dialog.open(ProductUpdateDialogComponent, {
+      data: { id: productId },
       width: '500px',
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      this.getProductList(); // Listesi güncelle
     });
   }
 
@@ -145,9 +163,7 @@ export class ProductComponent implements AfterViewInit, OnInit {
     { label: 'Extra Large', value: Size.XL }
   ];
 
-
-
-  ngOnInit(): void  {
+  ngOnInit(): void {
     this.createProductAddForm();
 
     this.dropdownSettings = environment.getDropDownSetting;
@@ -159,22 +175,6 @@ export class ProductComponent implements AfterViewInit, OnInit {
     this.lookUpService.getOperationClaimLookUp().subscribe((data) => {
       this.claimDropdownList = data;
     });
-  }
-
-  onItemSelect(comboType: string) {
-    this.setComboStatus(comboType);
-  }
-
-  onSelectAll(comboType: string) {
-    this.setComboStatus(comboType);
-  }
-  onItemDeSelect(comboType: string) {
-    this.setComboStatus(comboType);
-  }
-
-  setComboStatus(comboType: string) {
-    if (comboType == "Group") this.isGroupChange = true;
-    else if (comboType == "Claim") this.isClaimChange = true;
   }
 
   createProductAddForm() {
@@ -216,7 +216,6 @@ export class ProductComponent implements AfterViewInit, OnInit {
     });
     console.log(group.controls); // Form kontrollerinin sıfırlanmış hallerini kontrol etmek için
   }
-  
 
   setProductId(id: number) {
     this.id = id;
@@ -241,12 +240,10 @@ export class ProductComponent implements AfterViewInit, OnInit {
     }
   }
 
-
   addProduct() {
     this.productService.addProduct(this.product).subscribe((data) => {
       this.getProductList();
       this.product = new Product();
-      //jQuery("#user").modal("hide");
       this.alertifyService.success(data);
       this.clearFormGroup(this.productAddForm);
     }, error => {
@@ -271,7 +268,6 @@ export class ProductComponent implements AfterViewInit, OnInit {
       this.dataSource = new MatTableDataSource(this.productList);
       this.configDataTable();
       this.product = new Product();
-      //jQuery("#user").modal("hide")
       this.alertifyService.success(data);
       this.clearFormGroup(this.productAddForm);
     });
@@ -292,8 +288,10 @@ export class ProductComponent implements AfterViewInit, OnInit {
   }
 
   configDataTable(): void {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    if (this.dataSource) {
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    }
   }
 
   applyFilter(event: Event) {
@@ -304,6 +302,4 @@ export class ProductComponent implements AfterViewInit, OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
-
-  
 }

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Entities.Concrete;
 using System.Collections.Generic;
 using Castle.Components.DictionaryAdapter;
+using Entities.Dtos;
 
 namespace WebAPI.Controllers
 {
@@ -87,9 +88,11 @@ namespace WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] UpdateCustomerCommand updateCustomer)
+        public async Task<IActionResult> Update([FromBody] UpdateCustomerDto updateCustomerDto)
         {
-            var result = await Mediator.Send(updateCustomer);
+            var updateCustomerCommand = new UpdateCustomerCommand { Customer = updateCustomerDto };
+
+            var result = await Mediator.Send(updateCustomerCommand);
             if (result.Success)
             {
                 return Ok(result.Message);

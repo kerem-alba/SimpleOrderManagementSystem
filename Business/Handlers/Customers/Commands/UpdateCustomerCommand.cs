@@ -19,7 +19,6 @@ using Entities.Dtos;
 namespace Business.Handlers.Customers.Commands
 {
 
-
     public class UpdateCustomerCommand : IRequest<IResult>
     {
         public UpdateCustomerDto Customer { get; set; }
@@ -43,15 +42,12 @@ namespace Business.Handlers.Customers.Commands
             {
                 var isThereCustomerRecord = await _customerRepository.GetAsync(u => u.Email == request.Customer.Email);
 
-
-                isThereCustomerRecord.CreatedUserId = request.Customer.CreatedUserId;
-                isThereCustomerRecord.Status = request.Customer.Status;
+                isThereCustomerRecord.Status = true;
                 isThereCustomerRecord.CustomerName = request.Customer.CustomerName;
                 isThereCustomerRecord.CustomerCode = request.Customer.CustomerCode;
                 isThereCustomerRecord.Address = request.Customer.Address;
                 isThereCustomerRecord.PhoneNumber = request.Customer.PhoneNumber;
                 isThereCustomerRecord.Email = request.Customer.Email;
-
 
                 _customerRepository.Update(isThereCustomerRecord);
                 await _customerRepository.SaveChangesAsync();

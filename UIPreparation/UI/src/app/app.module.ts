@@ -23,6 +23,9 @@ import { MatFormField, MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import { ProductUpdateDialogComponent } from './core/components/app/product/dialog/product-update-dialog/product-update-dialog.component';
+import { Customer } from './core/components/app/customer/model/Customer';
+import { CustomerAddDialogComponent } from './core/components/app/customer/dialog/customer-add-dialog/customer-add-dialog/customer-add-dialog.component';
+import { CustomerUpdateDialogComponent } from './core/components/app/customer/dialog/customer-update-dialog/customer-update-dialog/customer-update-dialog.component';
 
 
 // i18 kullanıclak ise aşağıdaki metod aktif edilecek
@@ -74,6 +77,8 @@ export function tokenGetter() {
     AdminLayoutComponent,
     ProductAddDialogComponent,
     ProductUpdateDialogComponent,
+    CustomerAddDialogComponent,
+    CustomerUpdateDialogComponent
   ],
 
   providers: [
