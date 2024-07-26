@@ -22,13 +22,8 @@ export class CustomerUpdateDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log('Dialog data:', this.data);  // Debug log
     this.createCustomerUpdateForm();
-    if (this.data && this.data.id) {
-      this.getCustomerById(this.data.id);
-    } else {
-      console.error('Dialog data id is invalid');
-    }
+    this.getCustomerById(this.data.id);
   }
 
   createCustomerUpdateForm() {

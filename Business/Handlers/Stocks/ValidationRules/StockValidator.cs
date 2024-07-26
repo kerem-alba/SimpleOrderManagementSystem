@@ -10,7 +10,6 @@ namespace Business.Handlers.Stocks.ValidationRules
         public CreateStockValidator()
         {
             RuleFor(x => x.Quantity).NotEmpty();
-            RuleFor(x => x.IsReadyForSale).NotEmpty();
 
         }
     }
@@ -19,7 +18,6 @@ namespace Business.Handlers.Stocks.ValidationRules
         public UpdateStockValidator()
         {
             RuleFor(x => x.Quantity).NotEmpty();
-            RuleFor(x => x.IsReadyForSale).NotEmpty();
 
         }
     }

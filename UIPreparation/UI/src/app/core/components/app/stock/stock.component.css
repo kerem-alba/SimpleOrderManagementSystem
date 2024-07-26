@@ -1,0 +1,20 @@
+.stock-confirmed {
+    font-size: small;
+    background-color: green;
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    text-align: center;
+    width: 100px;
+  }
+  
+  .stock-not-confirmed {
+    font-size: small;
+    background-color: red;
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    text-align: center;
+    width: 100px;
+
+  }

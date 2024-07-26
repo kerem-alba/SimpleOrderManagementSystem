@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Entities.Concrete;
 using System.Collections.Generic;
 using System;
+using Business.Handlers.Users.Commands;
 
 namespace WebAPI.Controllers
 {
@@ -120,12 +121,8 @@ namespace WebAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            var result = await Mediator.Send((new DeleteProductCommand { Id = id }));
-            if (result.Success)
-            {
-                return Ok(result.Message);
-            }
-            return BadRequest(result.Message);
+            return GetResponseOnlyResultMessage(await Mediator.Send(new DeleteProductCommand { Id = id }));
+
         }
     }
 }

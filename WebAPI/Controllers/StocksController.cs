@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Entities.Concrete;
 using System.Collections.Generic;
+using Business.Handlers.Stocks.Queries;
+using Entities.Dtos;
+using Business.Handlers.Users.Commands;
 
 namespace WebAPI.Controllers
 {
@@ -30,6 +33,20 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> GetList()
         {
             var result = await Mediator.Send(new GetStocksQuery());
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return BadRequest(result.Message);
+        }
+
+        [Produces("application/json", "text/plain")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Stock>))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
+        [HttpGet("getallwithdetails")]
+        public async Task<IActionResult> GetAllWithDetails()
+        {
+            var result = await Mediator.Send(new GetStockDetailsQuery());
             if (result.Success)
             {
                 return Ok(result.Data);
@@ -103,15 +120,10 @@ namespace WebAPI.Controllers
         [Produces("application/json", "text/plain")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-        [HttpDelete]
-        public async Task<IActionResult> Delete([FromBody] DeleteStockCommand deleteStock)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            var result = await Mediator.Send(deleteStock);
-            if (result.Success)
-            {
-                return Ok(result.Message);
-            }
-            return BadRequest(result.Message);
+            return GetResponseOnlyResultMessage(await Mediator.Send(new DeleteStockCommand { Id = id }));
         }
     }
 }

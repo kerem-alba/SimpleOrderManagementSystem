@@ -1,0 +1,187 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header card-header-danger">
+            <h4 class="card-title">Stock List</h4>
+            <a
+                *ngIf="checkClaim('CreateStockCommand')"
+                class="pull-right"
+                (click)="StockAddDialog()"
+              >
+                <i
+                  style="color: white"
+                  title="Add"
+                  class="far fa-plus-square fa-2x"
+                ></i>
+              </a>
+            <div class="col-md-4 pull-right">
+              <mat-form-field>
+                <mat-label>{{ 'Filter' | translate }}</mat-label>
+                <input
+                  matInput
+                  (keyup)="applyFilter($event)"
+                  placeholder=""
+                  #input
+                />
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table mat-table [dataSource]="dataSource" matSort>
+                <ng-container matColumnDef="stockId">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    Stock ID
+                  </th>
+                  <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="productName">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    Product Name
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.productName }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="quantity">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    {{ "Quantity" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.quantity }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="readyForSale">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    Is Ready For Sale
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    <div [ngClass]="{'stock-confirmed': element.isReadyForSale, 'stock-not-confirmed': !element.isReadyForSale}">
+                      {{ element.isReadyForSale ? 'Stock Confirmed' : 'Stock Not Confirmed' }}
+                    </div>
+                  </td>
+                </ng-container>
+                
+
+
+                <ng-container matColumnDef="isDeleted">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    Is Deleted
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    <mat-checkbox
+                      [checked]="element.isDeleted"
+                      [disabled]="true"
+                    ></mat-checkbox>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="approve">
+                  <th mat-header-cell *matHeaderCellDef>Confirm Stock</th>
+                  <td mat-cell *matCellDef="let element">
+                    <a
+                      *ngIf="checkClaim('UpdateStockCommand')"
+                      (confirm)="confirmForSale(element.id)"
+                      [swal]="confirmStockSwal"
+                    ><mat-icon title="Confirm Stock">check_circle</mat-icon></a>
+                    <a
+                      *ngIf="checkClaim('UpdateStockCommand')"
+                      (confirm)="rejectForSale(element.id)"
+                      [swal]="rejectStockSwal"
+                    ><mat-icon title="Reject Stock" style="color: red; margin-left: 10px;">cancel</mat-icon></a>
+                  </td>
+                </ng-container>
+
+                
+
+                <ng-container matColumnDef="edit">
+                  <th mat-header-cell *matHeaderCellDef>Edit</th>
+                  <td mat-cell *matCellDef="let element">
+                    <a
+                      *ngIf="checkClaim('UpdateStockCommand')"
+                      (click)="StockUpdateDialog(element)"
+                    >
+                      <i
+                        title="Edit"
+                        class="fa fa-edit"
+                      ></i>
+                    </a>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="delete">
+                  <th mat-header-cell *matHeaderCellDef> Delete</th>
+                  <td style="width: 25px" mat-cell *matCellDef="let element">
+                    <a
+                      *ngIf="checkClaim('DeleteStockCommand')"
+                      (confirm)="deleteStock(element.id)"
+                      [swal]="deleteSwal"
+                      ><i
+                        title="{{ 'Delete' | translate }}"
+                        style="color: #d9534e"
+                        class="fas fa-trash-alt"
+                      ></i
+                    ></a>
+                  </td>
+                </ng-container>
+
+                
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr
+                  mat-row
+                  *matRowDef="let row; columns: displayedColumns"
+                ></tr>
+
+                <tr class="mat-row" *matNoDataRow style="text-align: center">
+                  <td class="mat-cell" colspan="4">
+                    {{ "NoRecordsFound" | translate }} "{{ input.value }}"
+                  </td>
+                </tr>
+              </table>
+              <mat-paginator
+                [pageSizeOptions]="[10, 25, 50, 100]"
+              ></mat-paginator>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<swal
+  #confirmStockSwal
+  title="Confirm Stock"
+  icon="warning"
+  [showCancelButton]="true"
+  [confirmButtonText]="'OK'"
+  [cancelButtonText]="'Cancel'"
+>
+</swal>
+
+<swal
+  #rejectStockSwal
+  title="Reject Stock"
+  icon="warning"
+  [showCancelButton]="true"
+  [confirmButtonText]="'OK'"
+  [cancelButtonText]="'Cancel'"
+>
+</swal>
+
+
+<swal
+  #deleteSwal
+  title="{{ 'DeleteConfirm' | translate }}"
+  icon="error"
+  [showCancelButton]="true"
+  [confirmButtonText]="'OK'"
+  [cancelButtonText]="'Cancel'"
+>
+</swal>

@@ -38,7 +38,8 @@ namespace Business.Handlers.Stocks.Commands
             {
                 var stockToDelete = _stockRepository.Get(p => p.Id == request.Id);
 
-                _stockRepository.Delete(stockToDelete);
+                stockToDelete.IsDeleted = true;
+                _stockRepository.Update(stockToDelete);
                 await _stockRepository.SaveChangesAsync();
                 return new SuccessResult(Messages.Deleted);
             }

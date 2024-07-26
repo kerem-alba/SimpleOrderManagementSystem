@@ -22,13 +22,7 @@ namespace Business.Handlers.Stocks.Commands
     public class UpdateStockCommand : IRequest<IResult>
     {
         public int Id { get; set; }
-        public int CreatedUserId { get; set; }
-        public System.DateTime CreatedDate { get; set; }
-        public int LastUpdatedUserId { get; set; }
-        public System.DateTime LastUpdatedDate { get; set; }
-        public bool Status { get; set; }
         public bool IsDeleted { get; set; }
-        public int ProductId { get; set; }
         public int Quantity { get; set; }
         public bool IsReadyForSale { get; set; }
 
@@ -52,13 +46,9 @@ namespace Business.Handlers.Stocks.Commands
                 var isThereStockRecord = await _stockRepository.GetAsync(u => u.Id == request.Id);
 
 
-                isThereStockRecord.CreatedUserId = request.CreatedUserId;
-                isThereStockRecord.CreatedDate = request.CreatedDate;
-                isThereStockRecord.LastUpdatedUserId = request.LastUpdatedUserId;
-                isThereStockRecord.LastUpdatedDate = request.LastUpdatedDate;
-                isThereStockRecord.Status = request.Status;
+                isThereStockRecord.LastUpdatedUserId = 0;
+                isThereStockRecord.LastUpdatedDate = System.DateTime.Now;
                 isThereStockRecord.IsDeleted = request.IsDeleted;
-                isThereStockRecord.ProductId = request.ProductId;
                 isThereStockRecord.Quantity = request.Quantity;
                 isThereStockRecord.IsReadyForSale = request.IsReadyForSale;
 

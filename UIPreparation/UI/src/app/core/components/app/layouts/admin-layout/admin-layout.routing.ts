@@ -11,6 +11,7 @@ import { DashboardComponent } from '../../dashboard/dashboard.component';
 import { ProductComponent } from '../../product/product.component';
 import { CustomerComponent } from '../../customer/customer.component';
 import { OrderComponent } from '../../order/order/order.component';
+import { StockComponent } from '../../stock/stock.component';
 
 
 
@@ -26,6 +27,7 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'log',            component: LogDtoComponent,canActivate:[LoginGuard]},
     { path: "product",        component: ProductComponent, canActivate:[LoginGuard] },
     { path: "customer",       component: CustomerComponent, canActivate:[LoginGuard] },
-    { path: "order",          component: OrderComponent, canActivate:[LoginGuard] }
+    { path: "order",          component: OrderComponent, canActivate:[LoginGuard] },
+    { path: "stock",          component: StockComponent, canActivate:[LoginGuard] },
     
 ];

@@ -28,7 +28,8 @@ import { CustomerAddDialogComponent } from './core/components/app/customer/dialo
 import { CustomerUpdateDialogComponent } from './core/components/app/customer/dialog/customer-update-dialog/customer-update-dialog/customer-update-dialog.component';
 import { Order } from './core/components/app/order/model/Order';
 import { OrderAddDialogComponent } from './core/components/app/order/dialog/order-add-dialog/order-add-dialog.component';
-
+import { StockAddDialogComponent } from './core/components/app/stock/dialog/stock-add-dialog/stock-add-dialog.component';
+import { StockUpdateDialogComponent } from './core/components/app/stock/dialog/stock-update-dialog/stock-update-dialog.component';
 
 // i18 kullanıclak ise aşağıdaki metod aktif edilecek
 
@@ -81,7 +82,9 @@ export function tokenGetter() {
     ProductUpdateDialogComponent,
     CustomerAddDialogComponent,
     CustomerUpdateDialogComponent,
-    OrderAddDialogComponent
+    OrderAddDialogComponent,
+    StockAddDialogComponent,
+    StockUpdateDialogComponent,
   ],
 
   providers: [

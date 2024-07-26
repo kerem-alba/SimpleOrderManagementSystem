@@ -22,12 +22,6 @@ namespace Business.Handlers.Stocks.Commands
     public class CreateStockCommand : IRequest<IResult>
     {
 
-        public int CreatedUserId { get; set; }
-        public System.DateTime CreatedDate { get; set; }
-        public int LastUpdatedUserId { get; set; }
-        public System.DateTime LastUpdatedDate { get; set; }
-        public bool Status { get; set; }
-        public bool IsDeleted { get; set; }
         public int ProductId { get; set; }
         public int Quantity { get; set; }
         public bool IsReadyForSale { get; set; }
@@ -49,22 +43,21 @@ namespace Business.Handlers.Stocks.Commands
             [SecuredOperation(Priority = 1)]
             public async Task<IResult> Handle(CreateStockCommand request, CancellationToken cancellationToken)
             {
-                var isThereStockRecord = _stockRepository.Query().Any(u => u.CreatedUserId == request.CreatedUserId);
+                var isThereStockRecord = _stockRepository.Query().Any(u => u.ProductId == request.ProductId);
 
                 if (isThereStockRecord == true)
                     return new ErrorResult(Messages.NameAlreadyExist);
 
                 var addedStock = new Stock
                 {
-                    CreatedUserId = request.CreatedUserId,
-                    CreatedDate = request.CreatedDate,
-                    LastUpdatedUserId = request.LastUpdatedUserId,
-                    LastUpdatedDate = request.LastUpdatedDate,
-                    Status = request.Status,
-                    IsDeleted = request.IsDeleted,
+                    CreatedUserId = 1,
+                    CreatedDate = System.DateTime.Now,
+                    LastUpdatedUserId = 1,
+                    LastUpdatedDate = System.DateTime.Now,
+                    IsDeleted = false,
                     ProductId = request.ProductId,
                     Quantity = request.Quantity,
-                    IsReadyForSale = request.IsReadyForSale,
+                    IsReadyForSale = false,
 
                 };
 
