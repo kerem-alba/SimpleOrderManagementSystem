@@ -4,9 +4,11 @@ using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Logging;
 using Core.Aspects.Autofac.Validation;
 using Core.CrossCuttingConcerns.Logging.Serilog.Loggers;
+using Core.Enums;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using MediatR;
+using ServiceStack.Messaging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,10 +53,13 @@ namespace Business.Handlers.Orders.Commands
 
                 if (stock.Quantity < order.Quantity)
                 {
+                    order.OrderStatus = StatusEnum.Rejected;
+                    _orderRepository.Update(order);
+                    await _orderRepository.SaveChangesAsync();
                     return new ErrorResult("Insufficient stock.");
                 }
 
-                order.Status = true;
+                order.OrderStatus = StatusEnum.Approved;
                 stock.Quantity -= order.Quantity;
 
                 _orderRepository.Update(order);

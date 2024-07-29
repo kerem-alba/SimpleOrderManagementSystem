@@ -2300,6 +2300,9 @@ namespace DataAccess.Migrations.Ms
                     b.Property<int>("LastUpdatedUserId")
                         .HasColumnType("int");
 
+                    b.Property<int>("OrderStatus")
+                        .HasColumnType("int");
+
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 

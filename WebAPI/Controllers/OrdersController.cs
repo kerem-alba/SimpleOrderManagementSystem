@@ -9,6 +9,7 @@ using Entities.Concrete;
 using System.Collections.Generic;
 using Business.BusinessAspects;
 using Entities.Dtos;
+using System;
 
 namespace WebAPI.Controllers
 {
@@ -105,6 +106,8 @@ namespace WebAPI.Controllers
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] UpdateOrderCommand updateOrder)
         {
+            Console.WriteLine("Güncellenen sipariş ID: " + updateOrder.Id);
+            Console.WriteLine("Yeni durum: " + updateOrder.OrderStatus);
             var result = await Mediator.Send(updateOrder);
             if (result.Success)
             {

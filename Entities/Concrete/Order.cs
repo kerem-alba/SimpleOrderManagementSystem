@@ -1,4 +1,5 @@
 ﻿using Core.Entities;
+using Core.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,6 @@ namespace Entities.Concrete
         public int ProductId { get; set; }
         public Product Product { get; set; }
         public int Quantity { get; set; }
+        public StatusEnum OrderStatus { get; set; }
     }
 }

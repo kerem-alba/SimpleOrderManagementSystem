@@ -25,6 +25,7 @@ namespace DataAccess.Concrete.EntityFramework
                 {
                     Id = s.Id,
                     ProductName = s.Product.Name,
+                    ProductId = s.ProductId,
                     Quantity = s.Quantity,
                     IsReadyForSale = s.IsReadyForSale,
                     IsDeleted = s.IsDeleted

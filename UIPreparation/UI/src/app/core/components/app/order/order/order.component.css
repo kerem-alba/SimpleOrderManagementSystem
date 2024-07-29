@@ -1,0 +1,31 @@
+.status {
+    padding: 5px 10px;
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;
+  }
+  
+  .status.pending {
+    background-color: yellow;
+    color: black;
+    animation: blink 2s infinite;
+  }
+  
+  @keyframes blink {
+    90% {
+      opacity: 0;
+    }
+  }
+  
+  .status.approved {
+    background-color: green;
+  }
+  
+  .status.rejected {
+    background-color: red;
+  }
+  
+  .status.cancelled {
+    background-color: gray;
+  }
+  

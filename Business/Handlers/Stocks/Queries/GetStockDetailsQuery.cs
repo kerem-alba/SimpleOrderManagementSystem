@@ -1,6 +1,8 @@
-﻿using Business.Handlers.Stocks.Queries;
+﻿using AutoMapper;
+using Business.Handlers.Stocks.Queries;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
+using DataAccess.Concrete.EntityFramework;
 using Entities.Dtos;
 using MediatR;
 using System;
@@ -19,17 +21,21 @@ namespace Business.Handlers.Stocks.Queries
 
     public class GetStockDetailsQueryHandler : IRequestHandler<GetStockDetailsQuery, IDataResult<IEnumerable<StockDto>>>
     {
-        private readonly IStockRepository _StockRepository;
+        private readonly IStockRepository _stockRepository;
+        private readonly IMapper _mapper;
 
-        public GetStockDetailsQueryHandler(IStockRepository StockRepository)
+
+        public GetStockDetailsQueryHandler(IStockRepository StockRepository, IMapper mapper)
         {
-            _StockRepository = StockRepository;
+            _stockRepository = StockRepository;
+            _mapper = mapper;
         }
 
         public async Task<IDataResult<IEnumerable<StockDto>>> Handle(GetStockDetailsQuery request, CancellationToken cancellationToken)
         {
-            var data = await _StockRepository.GetStockDetailsAsync();
-            return new SuccessDataResult<IEnumerable<StockDto>>(data);
+            var stocks = await _stockRepository.GetStockDetailsAsync();
+            var stockDtos = _mapper.Map<IEnumerable<StockDto>>(stocks);
+            return new SuccessDataResult<IEnumerable<StockDto>>(stockDtos);
         }
     }
 }

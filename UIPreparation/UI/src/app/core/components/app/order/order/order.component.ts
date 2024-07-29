@@ -1,9 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  OnInit,
-  ViewChild,
-} from "@angular/core";
+import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
 import {
   FormBuilder,
   FormGroup,
@@ -12,8 +7,13 @@ import {
   Validators,
 } from "@angular/forms";
 import { Order } from "../model/Order";
+import { StatusEnum } from "../model/StatusEnum.enum";
 import { OrderService } from "../services/order.service";
-import { IDropdownSettings, NgMultiSelectDropDownModule } from "ng-multiselect-dropdown";
+import { StockService } from "../../stock/services/stock.service";
+import {
+  IDropdownSettings,
+  NgMultiSelectDropDownModule,
+} from "ng-multiselect-dropdown";
 import { LookUp } from "app/core/models/LookUp";
 import { AlertifyService } from "app/core/services/alertify.service";
 import { LookUpService } from "app/core/services/LookUp.service";
@@ -32,20 +32,18 @@ import {
 import { MatButtonModule, MatIconButton } from "@angular/material/button";
 import { MatInputModule } from "@angular/material/input";
 import { CommonModule } from "@angular/common";
-import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatRippleModule } from "@angular/material/core";
 import { MatSelectModule } from "@angular/material/select";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { TranslateModule } from "@ngx-translate/core";
 import { OrderAddDialogComponent } from "../dialog/order-add-dialog/order-add-dialog.component";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
-import { MatGridListModule } from '@angular/material/grid-list';
-import { MatCardModule } from '@angular/material/card';
-import {MatChipsModule} from '@angular/material/chips';
-import {MatDividerModule} from '@angular/material/divider';
+import { MatGridListModule } from "@angular/material/grid-list";
+import { MatCardModule } from "@angular/material/card";
+import { MatChipsModule } from "@angular/material/chips";
+import { MatDividerModule } from "@angular/material/divider";
 import { MatIconModule } from "@angular/material/icon";
-
-
 
 @Component({
   selector: "order",
@@ -77,10 +75,8 @@ import { MatIconModule } from "@angular/material/icon";
     MatCardModule,
     MatChipsModule,
     MatDividerModule,
-    MatIconModule
+    MatIconModule,
   ],
-
-        
 
   providers: [SweetAlert2Module.forRoot().providers],
 
@@ -96,8 +92,8 @@ export class OrderComponent implements AfterViewInit, OnInit {
     "customerName",
     "productName",
     "quantity",
-    "status",
-    "approve",
+    "orderStatus",
+    "actions",
   ];
 
   order: Order = new Order();
@@ -121,19 +117,19 @@ export class OrderComponent implements AfterViewInit, OnInit {
     private alertifyService: AlertifyService,
     private lookUpService: LookUpService,
     private authService: AuthService,
+    private stockService: StockService,
     public dialog: MatDialog
   ) {}
 
   OrderAddDialog(): void {
     const dialogRef = this.dialog.open(OrderAddDialogComponent, {
-      width: '500px',
+      width: "500px",
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       this.getOrderList(); // Listesi güncelle
     });
   }
-
 
   ngAfterViewInit(): void {
     this.getOrderList();
@@ -164,7 +160,6 @@ export class OrderComponent implements AfterViewInit, OnInit {
       status: [false],
     });
   }
-
 
   getOrderList() {
     this.orderService.getOrderList().subscribe(
@@ -199,36 +194,6 @@ export class OrderComponent implements AfterViewInit, OnInit {
     this.id = id;
   }
 
-  save() {
-    if (this.orderAddForm.valid) {
-        console.log('Form submitted', this.orderAddForm.value);
-        this.order = Object.assign({}, this.orderAddForm.value);
-
-        if (this.order.id == 0) this.addOrder();
-        else this.updateOrder();
-    }
-    else {
-        console.log('Form is invalid');
-        console.log(this.orderAddForm.controls);  // Kontrol edilecek alanlar
-        for (const control in this.orderAddForm.controls) {
-            if (this.orderAddForm.controls[control].errors) {
-                console.log(`Error in ${control}:`, this.orderAddForm.controls[control].errors);
-            }
-        }
-    }
-  }
-
-  addOrder() {
-    this.orderService.addOrder(this.order).subscribe((data) => {
-      this.getOrderList();
-      this.order = new Order();
-      this.alertifyService.success(data);
-      this.clearFormGroup(this.orderAddForm);
-    }, error => {
-      console.error('Error adding order:', error);
-    });
-  }
-
   getOrderById(id: number) {
     this.clearFormGroup(this.orderAddForm);
     this.orderService.getOrderById(id).subscribe((data) => {
@@ -237,31 +202,75 @@ export class OrderComponent implements AfterViewInit, OnInit {
     });
   }
 
-  updateOrder() {
-    this.orderService.updateOrder(this.order).subscribe((data) => {
-      var index = this.orderList.findIndex(
-        (x) => x.id == this.order.id
-      );
-      this.orderList[index] = this.order;
-      this.dataSource = new MatTableDataSource(this.orderList);
-      this.configDataTable();
-      this.order = new Order();
-      this.alertifyService.success(data);
-      this.clearFormGroup(this.orderAddForm);
-    });
-  }
+  updateOrderStatus(id: number, status: StatusEnum) {
+    const order = this.orderList.find((x) => x.id === id);
+    const updatedOrder = { ...order, orderStatus: status };
 
-
-  approveOrder(id: number) {
-    this.orderService.approveOrder(id).subscribe(
-      () => {
-        this.alertifyService.success('Order approved successfully');
-        this.getOrderList(); // Listesi güncelle
+    this.orderService.updateOrder(updatedOrder).subscribe(
+      (data) => {
+        var index = this.orderList.findIndex((x) => x.id == updatedOrder.id);
+        this.orderList[index] = updatedOrder;
+        this.dataSource = new MatTableDataSource(this.orderList);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        this.alertifyService.success(
+          `Order ${StatusEnum[status].toLowerCase()} successfully`
+        );
       },
       (error) => {
-        this.alertifyService.error('Error approving order');
+        console.error("Error response:", error); // Hata mesajını detaylı olarak yazdırın
+        this.alertifyService.error(
+          `Error ${StatusEnum[status].toLowerCase()} order`
+        );
       }
     );
+  }
+
+  approveOrder(id: number) {
+    const order = this.orderList.find((x) => x.id === id);
+    console.log("Order:", order);
+    this.stockService.getStockList().subscribe(
+      (stocks) => {
+        const stock = stocks.find((s) => s.productId === order.productId);
+        if (!stock || stock.isDeleted) {
+          this.alertifyService.error("No stock for this product");
+          return;
+        }
+        console.log("Stock:", stock, "Order:", order);
+        if (stock.isReadyForSale === false) {
+          this.alertifyService.error("Stock is not ready for sale.");
+          return;
+        }
+        if (stock.quantity >= order.quantity) {
+          this.stockService.updateStock(stock).subscribe(
+            () => {
+              this.updateOrderStatus(id, StatusEnum.Approved);
+              this.alertifyService.success("Sufficient stocks.");
+            },
+            (error) => {
+              this.alertifyService.error("Error updating stock.");
+            }
+          );
+        } else {
+          this.alertifyService.error("Not enough stock to approve this order.");
+        }
+      },
+      (error) => {
+        console.error("Error fetching stock list:", error);
+        this.alertifyService.error("Error fetching stock information");
+      }
+    );
+  }
+
+  rejectOrder(id: number) {
+    this.updateOrderStatus(id, StatusEnum.Rejected);
+  }
+
+  cancelOrder(id: number) {
+    this.updateOrderStatus(id, StatusEnum.Cancelled);
+  }
+  getStatusText(status: StatusEnum): string {
+    return StatusEnum[status];
   }
 
   checkClaim(claim: string): boolean {
@@ -283,5 +292,4 @@ export class OrderComponent implements AfterViewInit, OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
-
 }

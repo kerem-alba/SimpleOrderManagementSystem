@@ -26,9 +26,10 @@ namespace DataAccess.Concrete.EntityFramework
                 {
                     Id = o.Id,
                     CustomerName = o.Customer.CustomerName,
+                    ProductId = o.ProductId,
                     ProductName = o.Product.Name,
                     Quantity = o.Quantity,
-                    Status = o.Status
+                    OrderStatus = o.OrderStatus
                 }).ToListAsync();
 
             return result;

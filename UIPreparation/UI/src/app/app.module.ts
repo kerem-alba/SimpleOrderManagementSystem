@@ -16,12 +16,12 @@ import { LoginGuard } from './core/guards/login-guard';
 import { AuthInterceptorService } from './core/interceptors/auth-interceptor.service';
 import { HttpEntityRepositoryService } from './core/services/http-entity-repository.service';
 import { MatDialogModule } from '@angular/material/dialog';
-import { MatIconButton } from '@angular/material/button';
+import { MatButtonModule, MatIconButton } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { ProductAddDialogComponent } from './core/components/app/product/dialog/product-add-dialog/product-add-dialog.component';
 import { MatFormField, MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import {MatInputModule} from '@angular/material/input';
+import { MatInputModule } from '@angular/material/input';
 import { ProductUpdateDialogComponent } from './core/components/app/product/dialog/product-update-dialog/product-update-dialog.component';
 import { Customer } from './core/components/app/customer/model/Customer';
 import { CustomerAddDialogComponent } from './core/components/app/customer/dialog/customer-add-dialog/customer-add-dialog/customer-add-dialog.component';
@@ -31,13 +31,6 @@ import { OrderAddDialogComponent } from './core/components/app/order/dialog/orde
 import { StockAddDialogComponent } from './core/components/app/stock/dialog/stock-add-dialog/stock-add-dialog.component';
 import { StockUpdateDialogComponent } from './core/components/app/stock/dialog/stock-update-dialog/stock-update-dialog.component';
 
-// i18 kullanıclak ise aşağıdaki metod aktif edilecek
-
-//  export function HttpLoaderFactory(http: HttpClient) {
-//    
-//    var asd=new TranslateHttpLoader(http, '../../../../assets/i18n/', '.json'); 
-//    return asd;
-//  }
 
 
 export function tokenGetter() {
@@ -73,6 +66,8 @@ export function tokenGetter() {
     MatFormFieldModule,
     BrowserAnimationsModule,
     MatInputModule,
+    MatButtonModule,
+    MatIconModule
 
   ],
   declarations: [

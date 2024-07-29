@@ -16,6 +16,7 @@ using Business.Handlers.Orders.ValidationRules;
 using Entities.Dtos;
 using Core.Extensions;
 using System;
+using Core.Enums;
 
 namespace Business.Handlers.Orders.Commands
 {
@@ -62,11 +63,11 @@ namespace Business.Handlers.Orders.Commands
                     CreatedDate = DateTime.Today,
                     LastUpdatedUserId = userId,
                     LastUpdatedDate = DateTime.Today,
-                    Status = false,
                     IsDeleted = false,
                     CustomerId = request.Order.CustomerId,
                     ProductId = request.Order.ProductId,
                     Quantity = request.Order.Quantity,
+                    OrderStatus = StatusEnum.Pending
 
                 };
 

@@ -1,4 +1,5 @@
-﻿using Core.Utilities.Results;
+﻿using AutoMapper;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Dtos;
 using MediatR;
@@ -18,16 +19,21 @@ namespace Business.Handlers.Orders.Queries
     public class GetOrderDetailsQueryHandler : IRequestHandler<GetOrderDetailsQuery, IDataResult<IEnumerable<OrderDto>>>
     {
         private readonly IOrderRepository _orderRepository;
+        private readonly IMapper _mapper;
 
-        public GetOrderDetailsQueryHandler(IOrderRepository orderRepository)
+
+        public GetOrderDetailsQueryHandler(IOrderRepository orderRepository, IMapper mapper)
         {
             _orderRepository = orderRepository;
+            _mapper = mapper;
+
         }
 
         public async Task<IDataResult<IEnumerable<OrderDto>>> Handle(GetOrderDetailsQuery request, CancellationToken cancellationToken)
         {
-            var data = await _orderRepository.GetOrderDetailsAsync();
-            return new SuccessDataResult<IEnumerable<OrderDto>>(data);
+            var orders = await _orderRepository.GetOrderDetailsAsync();
+            var orderDtos = _mapper.Map<IEnumerable<OrderDto>>(orders);
+            return new SuccessDataResult<IEnumerable<OrderDto>>(orderDtos);
         }
     }
 }

@@ -6,19 +6,19 @@
           <div class="card-header card-header-danger">
             <h4 class="card-title">Order List</h4>
             <a
-                *ngIf="checkClaim('CreateOrderCommand')"
-                class="pull-right"
-                (click)="orderAddDialog()"
-              >
-                <i
-                  style="color: white"
-                  title="Add"
-                  class="far fa-plus-square fa-2x"
-                ></i>
-              </a>
+              *ngIf="checkClaim('CreateOrderCommand')"
+              class="pull-right"
+              (click)="OrderAddDialog()"
+            >
+              <i
+                style="color: white"
+                title="Add"
+                class="far fa-plus-square fa-2x"
+              ></i>
+            </a>
             <div class="col-md-4 pull-right">
               <mat-form-field>
-                <mat-label>{{ 'Filter' | translate }}</mat-label>
+                <mat-label>{{ "Filter" | translate }}</mat-label>
                 <input
                   matInput
                   (keyup)="applyFilter($event)"
@@ -33,7 +33,7 @@
               <table mat-table [dataSource]="dataSource" matSort>
                 <ng-container matColumnDef="orderId">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                    "Order ID" 
+                    Order ID
                   </th>
                   <td mat-cell *matCellDef="let element">{{ element.id }}</td>
                 </ng-container>
@@ -58,39 +58,62 @@
 
                 <ng-container matColumnDef="quantity">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                    {{ "Quantity" | translate }}
+                    Quantity
                   </th>
                   <td mat-cell *matCellDef="let element">
                     {{ element.quantity }}
                   </td>
                 </ng-container>
 
-                <ng-container matColumnDef="status">
+                <ng-container matColumnDef="orderStatus">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     Status
                   </th>
                   <td mat-cell *matCellDef="let element">
-                    <mat-checkbox
-                      [checked]="element.status"
-                      [disabled]="true"
-                    ></mat-checkbox>
+                    <span
+                      class="status"
+                      [ngClass]="{
+                        pending: element.orderStatus === 'Pending',
+                        approved: element.orderStatus === 'Approved',
+                        rejected: element.orderStatus === 'Rejected',
+                        cancelled: element.orderStatus === 'Cancelled'
+                      }"
+                    >
+                      {{ element.orderStatus }}
+                    </span>
                   </td>
                 </ng-container>
 
-
-                <ng-container matColumnDef="approve">
-                  <th mat-header-cell *matHeaderCellDef></th>
+                <ng-container matColumnDef="actions">
+                  <th mat-header-cell *matHeaderCellDef>Actions</th>
                   <td mat-cell *matCellDef="let element">
-                    <a
-                      *ngIf="checkClaim('UpdateOrderCommand')"
-                      (click)="approveOrder(element.id)"
-                      [swal]="confirmOrderSwal"
+                    <button
+                      mat-icon-button
+                      color="primary"
+                      (confirm)="approveOrder(element.id)"
+                      [swal]="approveSwal"
+                      matTooltip="Approve"
                     >
-                      <i
-                        title="Approve Order"
-                        class="fa fa-check"
-                      ></i>
-                    </a>
+                      <mat-icon>check_circle</mat-icon>
+                    </button>
+                    <button
+                      mat-icon-button
+                      color="warn"
+                      (confirm)="rejectOrder(element.id)"
+                      [swal]="rejectSwal"
+                      matTooltip="Reject"
+                    >
+                      <mat-icon>cancel</mat-icon>
+                    </button>
+                    <button
+                      mat-icon-button
+                      color="accent"
+                      (confirm)="cancelOrder(element.id)"
+                      [swal]="cancelSwal"
+                      matTooltip="Cancel"
+                    >
+                      <mat-icon>block</mat-icon>
+                    </button>
                   </td>
                 </ng-container>
 
@@ -118,8 +141,28 @@
 </div>
 
 <swal
-  #confirmOrderSwal
-  title="Confirm Order"
+  #approveSwal
+  title="Approve Order"
+  icon="warning"
+  [showCancelButton]="true"
+  [confirmButtonText]="'OK'"
+  [cancelButtonText]="'Cancel'"
+>
+</swal>
+
+<swal
+  #rejectSwal
+  title="Reject Order"
+  icon="warning"
+  [showCancelButton]="true"
+  [confirmButtonText]="'OK'"
+  [cancelButtonText]="'Cancel'"
+>
+</swal>
+
+<swal
+  #cancelSwal
+  title="Cancel Order"
   icon="warning"
   [showCancelButton]="true"
   [confirmButtonText]="'OK'"

@@ -1,3 +1,5 @@
+import { StatusEnum } from "./StatusEnum.enum";
+
 export class Order {
     id: number;
     customerId: number;
@@ -5,7 +7,7 @@ export class Order {
     quantity: number;
     customer?: Customer;  
     product?: Product;   
-    status: boolean;
+    orderStatus: StatusEnum; 
   }
   
   export class Customer {
