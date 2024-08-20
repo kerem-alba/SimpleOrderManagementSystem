@@ -50,26 +50,41 @@
                   </mat-card-content>
                   <mat-card-footer class="product-card-footer">
                     <mat-chip-set>
-                      <mat-chip>Color: {{ element.colorId }}</mat-chip>
+                      <mat-chip
+                        [ngStyle]="{
+                          'background-color': getColorCode(element.colorId)
+                        }"
+                        >Color: {{ element.colorId }}</mat-chip
+                      >
                       <mat-chip>Size: {{ element.size }}</mat-chip>
                     </mat-chip-set>
-                    <mat-card-content>
-                      <mat-checkbox [checked]="element.status" [disabled]="true">Status</mat-checkbox>
-                    </mat-card-content>
                   </mat-card-footer>
 
                   <mat-card-actions>
                     <div class="actions-flex-container">
                       <div class="actions-button-container">
-                        <button class="action-button" id="edit-button" mat-fab extended *ngIf="checkClaim('UpdateProductCommand')"
-                          (click)="ProductUpdateDialog(element.id)">
+                        <button
+                          class="action-button"
+                          id="edit-button"
+                          mat-fab
+                          extended
+                          *ngIf="checkClaim('UpdateProductCommand')"
+                          (click)="ProductUpdateDialog(element.id)"
+                        >
                           <mat-icon>edit</mat-icon>
                           Edit
                         </button>
                       </div>
                       <div class="actions-button-container">
-                        <button class="action-button" id="delete-button" mat-fab extended *ngIf="checkClaim('DeleteProductCommand')"
-                          (click)="deleteProduct(element.id)" [swal]="deleteSwal">
+                        <button
+                          class="action-button"
+                          id="delete-button"
+                          mat-fab
+                          extended
+                          *ngIf="checkClaim('DeleteProductCommand')"
+                          (confirm)="deleteProduct(element.id)"
+                          [swal]="deleteSwal"
+                        >
                           <mat-icon>delete</mat-icon>
                           Delete
                         </button>

@@ -1,9 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  OnInit,
-  ViewChild,
-} from "@angular/core";
+import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
 import {
   FormBuilder,
   FormGroup,
@@ -13,7 +8,13 @@ import {
 } from "@angular/forms";
 import { Product } from "./models/Product";
 import { ProductService } from "./services/product.service";
-import { IDropdownSettings, NgMultiSelectDropDownModule } from "ng-multiselect-dropdown";
+import { Color } from ".././color/model/Color";
+import { ColorService } from ".././color/service/color.service";
+
+import {
+  IDropdownSettings,
+  NgMultiSelectDropDownModule,
+} from "ng-multiselect-dropdown";
 import { LookUp } from "app/core/models/LookUp";
 import { AlertifyService } from "app/core/services/alertify.service";
 import { LookUpService } from "app/core/services/LookUp.service";
@@ -32,7 +33,7 @@ import {
 import { MatButtonModule, MatIconButton } from "@angular/material/button";
 import { MatInputModule } from "@angular/material/input";
 import { CommonModule } from "@angular/common";
-import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatRippleModule } from "@angular/material/core";
 import { MatSelectModule } from "@angular/material/select";
 import { MatTooltipModule } from "@angular/material/tooltip";
@@ -41,16 +42,11 @@ import { Size } from "./models/size.enum";
 import { ProductAddDialogComponent } from "./dialog/product-add-dialog/product-add-dialog.component";
 import { ProductUpdateDialogComponent } from "./dialog/product-update-dialog/product-update-dialog.component";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
-import { MatGridListModule } from '@angular/material/grid-list';
-import { MatCardModule } from '@angular/material/card';
-import {MatChipsModule} from '@angular/material/chips';
-import {MatDividerModule} from '@angular/material/divider';
+import { MatGridListModule } from "@angular/material/grid-list";
+import { MatCardModule } from "@angular/material/card";
+import { MatChipsModule } from "@angular/material/chips";
+import { MatDividerModule } from "@angular/material/divider";
 import { MatIconModule } from "@angular/material/icon";
-
-
-
-
-
 
 @Component({
   selector: "product",
@@ -82,10 +78,8 @@ import { MatIconModule } from "@angular/material/icon";
     MatCardModule,
     MatChipsModule,
     MatDividerModule,
-    MatIconModule
+    MatIconModule,
   ],
-
-        
 
   providers: [SweetAlert2Module.forRoot().providers],
 
@@ -100,7 +94,6 @@ export class ProductComponent implements AfterViewInit, OnInit {
     "id",
     "name",
     "colorId",
-    "status",
     "size",
     "update",
     "delete",
@@ -123,6 +116,7 @@ export class ProductComponent implements AfterViewInit, OnInit {
 
   constructor(
     private productService: ProductService,
+    private colorService: ColorService,
     private formBuilder: FormBuilder,
     private alertifyService: AlertifyService,
     private lookUpService: LookUpService,
@@ -132,10 +126,10 @@ export class ProductComponent implements AfterViewInit, OnInit {
 
   ProductAddDialog(): void {
     const dialogRef = this.dialog.open(ProductAddDialogComponent, {
-      width: '500px',
+      width: "500px",
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       this.getProductList(); // Listesi güncelle
     });
   }
@@ -143,10 +137,10 @@ export class ProductComponent implements AfterViewInit, OnInit {
   ProductUpdateDialog(productId: number): void {
     const dialogRef = this.dialog.open(ProductUpdateDialogComponent, {
       data: { id: productId },
-      width: '500px',
+      width: "500px",
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       this.getProductList(); // Listesi güncelle
     });
   }
@@ -157,10 +151,10 @@ export class ProductComponent implements AfterViewInit, OnInit {
 
   productAddForm: FormGroup;
   sizeOptions = [
-    { label: 'Small', value: Size.S },
-    { label: 'Medium', value: Size.M },
-    { label: 'Large', value: Size.L },
-    { label: 'Extra Large', value: Size.XL }
+    { label: "Small", value: Size.S },
+    { label: "Medium", value: Size.M },
+    { label: "Large", value: Size.L },
+    { label: "Extra Large", value: Size.XL },
   ];
 
   ngOnInit(): void {
@@ -182,23 +176,18 @@ export class ProductComponent implements AfterViewInit, OnInit {
       id: [0],
       name: ["", Validators.required],
       size: [null, Validators.required],
-      colorId: ["", Validators.required], 
-      status: [true],
+      colorId: ["", Validators.required],
+      isDeleted: [false],
     });
   }
 
   getProductList() {
     this.productService.getProductList().subscribe(
       (data) => {
-        this.productList = data;
-        this.dataSource = new MatTableDataSource(data);
+        const filteredData = data.filter((x) => x.isDeleted == false);
+        this.productList = filteredData;
+        this.dataSource = new MatTableDataSource(filteredData);
         this.configDataTable();
-
-        // Verinin doğru formatta olduğundan emin olun
-        this.dataSource.data.forEach((product) => {
-          console.log("Product:", product); // Kullanıcı verilerini kontrol etmek için
-          console.log("Type of status:", typeof product.status); // status alanının türünü kontrol etmek için
-        });
       },
       (error) => {
         console.error("Error fetching product list:", error);
@@ -214,41 +203,54 @@ export class ProductComponent implements AfterViewInit, OnInit {
       if (key === "id") group.get(key).setValue(0);
       else if (key === "status") group.get(key).setValue(true);
     });
-    console.log(group.controls); // Form kontrollerinin sıfırlanmış hallerini kontrol etmek için
+    console.log(group.controls);
   }
 
   setProductId(id: number) {
     this.id = id;
   }
 
+  getColorCode(colorId: number): string {
+    let color: Color = new Color();
+    this.colorService.getColorById(colorId).subscribe((data) => {
+      color = data;
+    });
+    return color.code;
+  }
+
   save() {
     if (this.productAddForm.valid) {
-        console.log('Form submitted', this.productAddForm.value);
-        this.product = Object.assign({}, this.productAddForm.value);
+      console.log("Form submitted", this.productAddForm.value);
+      this.product = Object.assign({}, this.productAddForm.value);
 
-        if (this.product.id == 0) this.addProduct();
-        else this.updateProduct();
-    }
-    else {
-        console.log('Form is invalid');
-        console.log(this.productAddForm.controls);  // Kontrol edilecek alanlar
-        for (const control in this.productAddForm.controls) {
-            if (this.productAddForm.controls[control].errors) {
-                console.log(`Error in ${control}:`, this.productAddForm.controls[control].errors);
-            }
+      if (this.product.id == 0) this.addProduct();
+      else this.updateProduct();
+    } else {
+      console.log("Form is invalid");
+      console.log(this.productAddForm.controls); // Kontrol edilecek alanlar
+      for (const control in this.productAddForm.controls) {
+        if (this.productAddForm.controls[control].errors) {
+          console.log(
+            `Error in ${control}:`,
+            this.productAddForm.controls[control].errors
+          );
         }
+      }
     }
   }
 
   addProduct() {
-    this.productService.addProduct(this.product).subscribe((data) => {
-      this.getProductList();
-      this.product = new Product();
-      this.alertifyService.success(data);
-      this.clearFormGroup(this.productAddForm);
-    }, error => {
-      console.error('Error adding product:', error);
-    });
+    this.productService.addProduct(this.product).subscribe(
+      (data) => {
+        this.getProductList();
+        this.product = new Product();
+        this.alertifyService.success(data);
+        this.clearFormGroup(this.productAddForm);
+      },
+      (error) => {
+        console.error("Error adding product:", error);
+      }
+    );
   }
 
   getProductById(id: number) {
@@ -261,9 +263,7 @@ export class ProductComponent implements AfterViewInit, OnInit {
 
   updateProduct() {
     this.productService.updateProduct(this.product).subscribe((data) => {
-      var index = this.productList.findIndex(
-        (x) => x.id == this.product.id
-      );
+      var index = this.productList.findIndex((x) => x.id == this.product.id);
       this.productList[index] = this.product;
       this.dataSource = new MatTableDataSource(this.productList);
       this.configDataTable();
@@ -274,12 +274,10 @@ export class ProductComponent implements AfterViewInit, OnInit {
   }
 
   deleteProduct(id: number) {
+    console.log("Delete customer with id:", id);
     this.productService.deleteProduct(id).subscribe((data) => {
       this.alertifyService.success(data.toString());
-      var index = this.productList.findIndex((x) => x.id == id);
-      this.productList[index].status = false;
-      this.dataSource = new MatTableDataSource(this.productList);
-      this.configDataTable();
+      this.getProductList();
     });
   }
 

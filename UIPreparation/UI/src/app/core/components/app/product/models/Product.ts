@@ -1,7 +1,7 @@
 export class Product {
-	id: number;
-	name: string;
-	colorId: number;
-	status: boolean;
-	size: string;
+  id: number;
+  name: string;
+  colorId: number;
+  isDeleted: boolean;
+  size: string;
 }

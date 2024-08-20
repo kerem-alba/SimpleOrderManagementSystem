@@ -26,11 +26,14 @@ namespace Tests.Business.HandlersTest
     public class OrderHandlerTests
     {
         Mock<IOrderRepository> _orderRepository;
+        Mock<IStockRepository> _stockRepository;
+
         Mock<IMediator> _mediator;
         [SetUp]
         public void Setup()
         {
             _orderRepository = new Mock<IOrderRepository>();
+            _stockRepository = new Mock<IStockRepository>();
             _mediator = new Mock<IMediator>();
         }
 
@@ -133,7 +136,7 @@ namespace Tests.Business.HandlersTest
 
             _orderRepository.Setup(x => x.Update(It.IsAny<Order>())).Returns(new Order());
 
-            var handler = new UpdateOrderCommandHandler(_orderRepository.Object, _mediator.Object);
+            var handler = new UpdateOrderCommandHandler(_orderRepository.Object, _stockRepository.Object, _mediator.Object);
             var x = await handler.Handle(command, new System.Threading.CancellationToken());
 
             _orderRepository.Verify(x => x.SaveChangesAsync());

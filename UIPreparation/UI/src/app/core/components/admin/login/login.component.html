@@ -1,44 +1,75 @@
-
-  <div class="container">
+<section class="vh-100">
+  <div class="container-fluid">
     <div class="row">
-      <div class="col-md-3 " ></div>
-      <div class="col-md-4 ">
-        <div class="card">
-          <div class="card-header card-header-danger">
-            <h4 class="card-title">{{'Login' | translate}}</h4>
-            <p class="card-category">DEV ARCHITECTURE</p>
-          </div>
-          <div class="card-body">
-            <form (submit)="login()">
-              <div class="row">
-                <div class="col-md-12 d-grid">
-                  <mat-form-field class="example-full-width">
-                    <input matInput placeholder="{{'Email' | translate}}"  name="email" [(ngModel)]="loginUser.email">
-                  </mat-form-field>
-                </div>
+      <div class="col-sm-6 text-black">
+        <div class="px-5 ms-xl-4">
+          <i
+            class="fas fa-crow fa-2x me-3 pt-5 mt-xl-4"
+            style="color: #709085"
+          ></i>
+          <span class="h1 fw-bold mb-0">Simple Order Management</span>
+        </div>
+
+        <div
+          class="d-flex align-items-center h-custom-2 px-5 ms-xl-4 mt-5 pt-5 pt-xl-0 mt-xl-n5"
+        >
+          <form (submit)="login()" class="col-md-10">
+            <div class="row">
+              <div class="col-md-12 d-grid">
+                <mat-form-field class="d-grid">
+                  <input
+                    matInput
+                    placeholder="{{ 'Email' | translate }}"
+                    name="email"
+                    [(ngModel)]="loginUser.email"
+                  />
+                </mat-form-field>
               </div>
-              <div class="row">
-                <div class="col-md-12 d-grid">
-                  <mat-form-field class="example-full-width">
-                    <input matInput placeholder="{{'Password' | translate}}" type="password"  name="password" [(ngModel)]="loginUser.password">
-                  </mat-form-field>
-                </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 d-grid">
+                <mat-form-field class="example-full-width">
+                  <input
+                    matInput
+                    placeholder="{{ 'Password' | translate }}"
+                    type="password"
+                    name="password"
+                    [(ngModel)]="loginUser.password"
+                  />
+                </mat-form-field>
               </div>
-              <div class="row">
-                <div class="col-md-12">
-                  <select class="browser-default custom-select" name="lang" [(ngModel)]="loginUser.lang" (change)="changeLang($event.target.value)">
-                    <option value ="" disabled selected>Seçiniz</option> 
-                    <option *ngFor="let item of langugelookUp" [value]="item.id"> {{item.label}}</option>
-                  </select>
-                </div>
+            </div>
+            <div class="row text-center">
+              <div class="col-md-12">
+                <select
+                  class="browser-default custom-select w-20 mx-auto"
+                  name="lang"
+                  [(ngModel)]="loginUser.lang"
+                  (change)="changeLang($event.target.value)"
+                >
+                  <option value="" disabled selected>Seçiniz</option>
+                  <option *ngFor="let item of langugelookUp" [value]="item.id">
+                    {{ item.label }}
+                  </option>
+                </select>
               </div>
-              <button mat-raised-button type="submit" class="btn btn-danger pull-right">{{'Login'| translate}}</button>
-              <div class="clearfix"></div>
-            </form>
-          </div>
+              <button class="btn btn-dark w-25 mt-3 mx-auto" type="submit">
+                {{ "Login" | translate }}
+              </button>
+            </div>
+
+            <div class="clearfix"></div>
+          </form>
         </div>
       </div>
-      <div class="col-md-5" ></div>
+      <div class="col-sm-6 px-0 d-none d-sm-block">
+        <img
+          src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/img3.webp"
+          alt="Login image"
+          class="w-100 vh-100"
+          style="object-fit: cover; object-position: left"
+        />
+      </div>
     </div>
   </div>
-
+</section>

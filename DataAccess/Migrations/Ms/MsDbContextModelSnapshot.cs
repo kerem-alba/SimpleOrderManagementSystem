@@ -2228,6 +2228,43 @@ namespace DataAccess.Migrations.Ms
                     b.ToTable("UserGroups");
                 });
 
+            modelBuilder.Entity("Entities.Concrete.Color", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CreatedUserId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastUpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("LastUpdatedUserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Color");
+                });
+
             modelBuilder.Entity("Entities.Concrete.Customer", b =>
                 {
                     b.Property<int>("Id")
@@ -2358,6 +2395,8 @@ namespace DataAccess.Migrations.Ms
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ColorId");
+
                     b.ToTable("Products");
                 });
 
@@ -2420,6 +2459,17 @@ namespace DataAccess.Migrations.Ms
                     b.Navigation("Customer");
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.Product", b =>
+                {
+                    b.HasOne("Entities.Concrete.Color", "Color")
+                        .WithMany()
+                        .HasForeignKey("ColorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Color");
                 });
 
             modelBuilder.Entity("Entities.Concrete.Stock", b =>

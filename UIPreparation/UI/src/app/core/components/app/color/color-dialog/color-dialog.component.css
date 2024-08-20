@@ -1,0 +1,21 @@
+.color-list {
+  display: flex;           
+  flex-wrap: wrap;         
+  gap: 10px;               
+}
+
+.color-item {
+  width: 100px;           
+  height: 50px;           
+  display: flex;           
+  justify-content: center; 
+  align-items: center;     
+  color: white;            
+  font-weight: bold;       
+  border-radius: 8px;      
+  text-transform: capitalize; 
+}
+
+.color-item span {
+  display: block;
+}

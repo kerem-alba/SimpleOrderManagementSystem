@@ -50,7 +50,7 @@ namespace Business.Handlers.Products.Commands
                     return new ErrorResult(Messages.UserNotFound);
                 }
 
-                var isThereProductRecord = _productRepository.Query().Any(u => u.Name == request.Product.Name);
+                var isThereProductRecord = _productRepository.Query().Any(u => u.Name == request.Product.Name && u.Size == request.Product.Size && u.ColorId == request.Product.ColorId && !u.IsDeleted );
 
                 if (isThereProductRecord == true)
                     return new ErrorResult(Messages.NameAlreadyExist);

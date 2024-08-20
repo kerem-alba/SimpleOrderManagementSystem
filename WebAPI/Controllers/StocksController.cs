@@ -7,9 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Entities.Concrete;
 using System.Collections.Generic;
-using Business.Handlers.Stocks.Queries;
-using Entities.Dtos;
-using Business.Handlers.Users.Commands;
+
 
 namespace WebAPI.Controllers
 {

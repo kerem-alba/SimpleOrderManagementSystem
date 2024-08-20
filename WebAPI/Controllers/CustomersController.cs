@@ -9,6 +9,7 @@ using Entities.Concrete;
 using System.Collections.Generic;
 using Castle.Components.DictionaryAdapter;
 using Entities.Dtos;
+using Business.Handlers.Stocks.Commands;
 
 namespace WebAPI.Controllers
 {
@@ -108,15 +109,10 @@ namespace WebAPI.Controllers
         [Produces("application/json", "text/plain")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-        [HttpDelete]
-        public async Task<IActionResult> Delete([FromBody] DeleteCustomerCommand deleteCustomer)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            var result = await Mediator.Send(deleteCustomer);
-            if (result.Success)
-            {
-                return Ok(result.Message);
-            }
-            return BadRequest(result.Message);
+            return GetResponseOnlyResultMessage(await Mediator.Send(new DeleteCustomerCommand { Id = id }));
         }
     }
 }

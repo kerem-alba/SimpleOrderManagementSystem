@@ -10,5 +10,7 @@ namespace Entities.Concrete
         public string Name { get; set; }
         public int ColorId { get; set; }
         public SizeEnum Size { get; set; }
+
+        public Color Color { get; set; }
     }
 }

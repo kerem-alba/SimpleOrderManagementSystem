@@ -40,3 +40,15 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# Cache dosyalarý
+.cache/
+*.cache
+
+
+# Log files
+*.log
+
+# Temp files
+*.tmp
+*.temp

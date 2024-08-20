@@ -1,9 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  OnInit,
-  ViewChild,
-} from "@angular/core";
+import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
 import {
   FormBuilder,
   FormGroup,
@@ -13,7 +8,10 @@ import {
 } from "@angular/forms";
 import { Customer } from "./model/Customer";
 import { CustomerService } from "./services/customer.service";
-import { IDropdownSettings, NgMultiSelectDropDownModule } from "ng-multiselect-dropdown";
+import {
+  IDropdownSettings,
+  NgMultiSelectDropDownModule,
+} from "ng-multiselect-dropdown";
 import { LookUp } from "app/core/models/LookUp";
 import { AlertifyService } from "app/core/services/alertify.service";
 import { LookUpService } from "app/core/services/LookUp.service";
@@ -32,7 +30,7 @@ import {
 import { MatButtonModule, MatIconButton } from "@angular/material/button";
 import { MatInputModule } from "@angular/material/input";
 import { CommonModule } from "@angular/common";
-import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatRippleModule } from "@angular/material/core";
 import { MatSelectModule } from "@angular/material/select";
 import { MatTooltipModule } from "@angular/material/tooltip";
@@ -40,13 +38,11 @@ import { TranslateModule } from "@ngx-translate/core";
 import { CustomerAddDialogComponent } from "./dialog/customer-add-dialog/customer-add-dialog/customer-add-dialog.component";
 import { CustomerUpdateDialogComponent } from "./dialog/customer-update-dialog/customer-update-dialog/customer-update-dialog.component";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
-import { MatGridListModule } from '@angular/material/grid-list';
-import { MatCardModule } from '@angular/material/card';
-import {MatChipsModule} from '@angular/material/chips';
-import {MatDividerModule} from '@angular/material/divider';
+import { MatGridListModule } from "@angular/material/grid-list";
+import { MatCardModule } from "@angular/material/card";
+import { MatChipsModule } from "@angular/material/chips";
+import { MatDividerModule } from "@angular/material/divider";
 import { MatIconModule } from "@angular/material/icon";
-
-
 
 @Component({
   selector: "customer",
@@ -78,10 +74,8 @@ import { MatIconModule } from "@angular/material/icon";
     MatCardModule,
     MatChipsModule,
     MatDividerModule,
-    MatIconModule
+    MatIconModule,
   ],
-
-        
 
   providers: [SweetAlert2Module.forRoot().providers],
 
@@ -96,7 +90,6 @@ export class CustomerComponent implements AfterViewInit, OnInit {
     "customerId",
     "email",
     "fullName",
-    "status",
     "mobilePhones",
     "address",
     "update",
@@ -129,10 +122,10 @@ export class CustomerComponent implements AfterViewInit, OnInit {
 
   CustomerAddDialog(): void {
     const dialogRef = this.dialog.open(CustomerAddDialogComponent, {
-      width: '500px',
+      width: "500px",
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       this.getCustomerList(); // Listesi güncelle
     });
   }
@@ -140,10 +133,10 @@ export class CustomerComponent implements AfterViewInit, OnInit {
   CustomerUpdateDialog(customerId: number): void {
     const dialogRef = this.dialog.open(CustomerUpdateDialogComponent, {
       data: { id: customerId },
-      width: '500px',
+      width: "500px",
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       this.getCustomerList(); // Listesi güncelle
     });
   }
@@ -180,19 +173,13 @@ export class CustomerComponent implements AfterViewInit, OnInit {
     });
   }
 
-
   getCustomerList() {
     this.customerService.getCustomerList().subscribe(
       (data) => {
+        const dataFiltered = data.filter((x) => x.isDeleted == false);
         this.customerList = data;
-        this.dataSource = new MatTableDataSource(data);
+        this.dataSource = new MatTableDataSource(dataFiltered);
         this.configDataTable();
-
-        // Verinin doğru formatta olduğundan emin olun
-        this.dataSource.data.forEach((customer) => {
-          console.log("Customer:", customer); // Kullanıcı verilerini kontrol etmek için
-          console.log("Type of status:", typeof customer.status); // status alanının türünü kontrol etmek için
-        });
       },
       (error) => {
         console.error("Error fetching customer list:", error);
@@ -217,32 +204,37 @@ export class CustomerComponent implements AfterViewInit, OnInit {
 
   save() {
     if (this.customerAddForm.valid) {
-        console.log('Form submitted', this.customerAddForm.value);
-        this.customer = Object.assign({}, this.customerAddForm.value);
+      console.log("Form submitted", this.customerAddForm.value);
+      this.customer = Object.assign({}, this.customerAddForm.value);
 
-        if (this.customer.id == 0) this.addCustomer();
-        else this.updateCustomer();
-    }
-    else {
-        console.log('Form is invalid');
-        console.log(this.customerAddForm.controls);  // Kontrol edilecek alanlar
-        for (const control in this.customerAddForm.controls) {
-            if (this.customerAddForm.controls[control].errors) {
-                console.log(`Error in ${control}:`, this.customerAddForm.controls[control].errors);
-            }
+      if (this.customer.id == 0) this.addCustomer();
+      else this.updateCustomer();
+    } else {
+      console.log("Form is invalid");
+      console.log(this.customerAddForm.controls); // Kontrol edilecek alanlar
+      for (const control in this.customerAddForm.controls) {
+        if (this.customerAddForm.controls[control].errors) {
+          console.log(
+            `Error in ${control}:`,
+            this.customerAddForm.controls[control].errors
+          );
         }
+      }
     }
   }
 
   addCustomer() {
-    this.customerService.addCustomer(this.customer).subscribe((data) => {
-      this.getCustomerList();
-      this.customer = new Customer();
-      this.alertifyService.success(data);
-      this.clearFormGroup(this.customerAddForm);
-    }, error => {
-      console.error('Error adding customer:', error);
-    });
+    this.customerService.addCustomer(this.customer).subscribe(
+      (data) => {
+        this.getCustomerList();
+        this.customer = new Customer();
+        this.alertifyService.success(data);
+        this.clearFormGroup(this.customerAddForm);
+      },
+      (error) => {
+        console.error("Error adding customer:", error);
+      }
+    );
   }
 
   getCustomerById(id: number) {
@@ -255,9 +247,7 @@ export class CustomerComponent implements AfterViewInit, OnInit {
 
   updateCustomer() {
     this.customerService.updateCustomer(this.customer).subscribe((data) => {
-      var index = this.customerList.findIndex(
-        (x) => x.id == this.customer.id
-      );
+      var index = this.customerList.findIndex((x) => x.id == this.customer.id);
       this.customerList[index] = this.customer;
       this.dataSource = new MatTableDataSource(this.customerList);
       this.configDataTable();
@@ -268,12 +258,10 @@ export class CustomerComponent implements AfterViewInit, OnInit {
   }
 
   deleteCustomer(id: number) {
+    console.log("Delete customer with id:", id);
     this.customerService.deleteCustomer(id).subscribe((data) => {
       this.alertifyService.success(data.toString());
-      var index = this.customerList.findIndex((x) => x.id == id);
-      this.customerList[index].status = false;
-      this.dataSource = new MatTableDataSource(this.customerList);
-      this.configDataTable();
+      this.getCustomerList();
     });
   }
 
