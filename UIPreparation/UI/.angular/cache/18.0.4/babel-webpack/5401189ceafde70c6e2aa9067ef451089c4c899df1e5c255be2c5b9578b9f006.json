@@ -1,1 +1,0 @@
-{"ast":null,"code":"export var StatusEnum = /*#__PURE__*/function (StatusEnum) {\n  StatusEnum[\"Approved\"] = \"Approved\";\n  StatusEnum[\"Pending\"] = \"Pending\";\n  StatusEnum[\"Cancelled\"] = \"Cancelled\";\n  StatusEnum[\"Rejected\"] = \"Rejected\";\n  return StatusEnum;\n}(StatusEnum || {});","map":null,"metadata":{},"sourceType":"module","externalDependencies":[]}
