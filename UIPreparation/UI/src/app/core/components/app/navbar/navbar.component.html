@@ -1,19 +1,85 @@
-<nav
-  class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top"
->
-  <div class="container-fluid">
-    <div class="collapse navbar-collapse justify-content-end" id="navigation">
-      <ul class="navbar-nav" *ngIf="isLoggedIn()">
-        <li class="nav-item">
-          <span>{{ userName }}</span>
-        </li>
-        <li class="nav-item" (click)="help()">
-          <span class="material-icons" title="Help"> help_outline </span>
-        </li>
-        <li class="nav-item" (click)="logOut()">
-          <span class="material-icons" title="Logout">login</span>
-        </li>
-      </ul>
+<div class="container-fluid">
+  <nav
+    class="navbar navbar-dark navbar-expand-lg navbar-absolute fixed-top mb-4"
+  >
+    <div
+      class="collapse navbar-collapse d-flex justify-content-between"
+      id="navigation"
+    >
+      <div class="navbar-nav">
+        <ul class="nav mt-auto">
+          <li routerLinkActive="active" id="AppMenu">
+            <ul class="nav">
+              <li
+                *ngFor="let menuItem of userMenuItems"
+                class="{{ menuItem.class }} nav-item d-flex align-items-center"
+              >
+                <a
+                  *ngIf="checkClaim(menuItem.claim)"
+                  class="nav-link"
+                  [routerLink]="[menuItem.path]"
+                >
+                  <div class="d-flex align-items-center">
+                    <div class="d-flex">
+                      <i class="material-icons fs-5 mx-2">
+                        {{ menuItem.icon }}
+                      </i>
+                      <h6>{{ menuItem.title | translate }}</h6>
+                    </div>
+                  </div>
+                </a>
+              </li>
+
+              <li routerLinkActive="active" class="nav-item dropdown">
+                <a
+                  class="nav-link dropdown-toggle d-flex align-items-center"
+                  href="#Management"
+                  id="navbarDropdown"
+                  role="button"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  <i class="material-icons fs-5 mx-2">widgets</i>
+                  <h6 class="mb-0">{{ "Management" | translate }}</h6>
+                </a>
+                <div
+                  class="dropdown-menu"
+                  id="Management"
+                  aria-labelledby="navbarDropdown"
+                >
+                  <ng-container *ngFor="let menuItem of adminMenuItems">
+                    <a
+                      *ngIf="checkClaim(menuItem.claim)"
+                      class="{{ menuItem.class }} dropdown-item"
+                      [routerLink]="[menuItem.path]"
+                    >
+                      <div class="d-flex">
+                        <i class="material-icons">{{ menuItem.icon }}</i>
+                        <p>{{ menuItem.title | translate }}</p>
+                      </div>
+                    </a>
+                  </ng-container>
+                </div>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <div class="">
+        <ul class="navbar-nav" *ngIf="isLoggedIn()">
+          <li class="nav-item">
+            <span>{{ userName }}</span>
+          </li>
+          <li class="nav-item" (click)="help()">
+            <span class="material-icons" title="Help"> help_outline </span>
+          </li>
+          <li class="nav-item" (click)="logOut()">
+            <span class="material-icons" title="Logout">login</span>
+          </li>
+        </ul>
+      </div>
     </div>
-  </div>
-</nav>
+  </nav>
+</div>

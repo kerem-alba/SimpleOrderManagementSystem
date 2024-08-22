@@ -39,3 +39,11 @@ span:hover {
 table {
     width: 100%;
   }
+
+body{
+    background-color: #183b63 !important;
+}
+
+ .main-content {
+    margin: 100px 24px;
+  }

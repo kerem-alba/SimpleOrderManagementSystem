@@ -1,3 +1,36 @@
 .nav-item{
 padding-right: 5px;
 }
+
+.navbar {
+    background-color: #3F72AF !important;
+    width: 95%;
+    margin: 0 auto;
+    border-radius: 0 0 12px 12px;
+}
+
+.container-fluid {
+    display: flex;
+    align-items: center;
+}
+
+p {
+    color: #112D4E;
+}
+h6 {
+  color: #112D4E;
+}
+
+.navbar-nav .nav-item span {
+  color: #112D4E; 
+}
+
+.navbar-nav .nav-item .material-icons {
+  color: #112D4E; 
+}
+
+.navbar-nav .nav-item.dropdown .dropdown-toggle::after {
+  border-top-color: #112D4E; 
+  border-width: 0.5rem; 
+}
+
