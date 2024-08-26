@@ -42,7 +42,7 @@ export class ColorDialogComponent implements OnInit {
       this.colorService.addColor(this.newColor).subscribe(
         (response) => {
           console.log("Renk eklendi:", response);
-          this.dialogRef.close(this.newColor);
+          this.getColors();
         },
         (error) => {
           console.error("Renk eklenirken hata oluştu:", error);

@@ -126,7 +126,6 @@ export class NavbarComponent implements OnInit {
     window.open("https://www.devarchitecture.net/", "_blank");
   }
   ngOnInit() {
-    console.log(this.userName);
     this.userName = this.authService.getUserName();
 
     this.adminMenuItems = ADMINROUTES.filter((menuItem) => menuItem);

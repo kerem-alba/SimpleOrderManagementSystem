@@ -4,6 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { StockService } from "../../services/stock.service";
 import { AlertifyService } from "app/core/services/alertify.service";
 import { ProductService } from "../../../product/services/product.service";
+import { Stock } from "../../model/Stock";
 
 @Component({
   selector: "app-stock-add-dialog",
@@ -46,7 +47,6 @@ export class StockAddDialogComponent implements OnInit {
   save() {
     if (this.stockAddForm.valid) {
       const stockData = this.stockAddForm.value;
-      console.log("Form Data:", stockData); // Form verilerini kontrol edin
 
       this.stockService.addStock(stockData).subscribe(
         (response) => {

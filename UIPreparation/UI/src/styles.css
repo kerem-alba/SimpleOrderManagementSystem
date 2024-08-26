@@ -47,3 +47,8 @@ body{
  .main-content {
     margin: 100px 24px;
   }
+
+  .fa-plus-square{
+	color: #112d4e !important;
+	font-size: 50px !important;
+  }

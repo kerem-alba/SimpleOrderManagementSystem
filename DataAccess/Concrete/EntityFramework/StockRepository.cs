@@ -28,7 +28,7 @@ namespace DataAccess.Concrete.EntityFramework
                     ProductId = s.ProductId,
                     Quantity = s.Quantity,
                     IsReadyForSale = s.IsReadyForSale,
-                    IsDeleted = s.IsDeleted
+                    IsDeleted = s.IsDeleted,
                 }).ToListAsync();
 
             return result;

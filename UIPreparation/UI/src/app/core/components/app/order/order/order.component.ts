@@ -10,10 +10,7 @@ import { Order } from "../model/Order";
 import { StatusEnum } from "../model/StatusEnum.enum";
 import { OrderService } from "../services/order.service";
 import { StockService } from "../../stock/services/stock.service";
-import {
-  IDropdownSettings,
-  NgMultiSelectDropDownModule,
-} from "ng-multiselect-dropdown";
+import { IDropdownSettings, NgMultiSelectDropDownModule } from "ng-multiselect-dropdown";
 import { LookUp } from "app/core/models/LookUp";
 import { AlertifyService } from "app/core/services/alertify.service";
 import { LookUpService } from "app/core/services/LookUp.service";
@@ -24,11 +21,7 @@ import { MatPaginator, MatPaginatorModule } from "@angular/material/paginator";
 import { MatTableDataSource, MatTableModule } from "@angular/material/table";
 import { AuthService } from "app/core/components/admin/login/services/auth.service";
 import { SweetAlert2Module } from "@sweetalert2/ngx-sweetalert2";
-import {
-  MatFormField,
-  MatFormFieldModule,
-  MatLabel,
-} from "@angular/material/form-field";
+import { MatFormField, MatFormFieldModule, MatLabel } from "@angular/material/form-field";
 import { MatButtonModule, MatIconButton } from "@angular/material/button";
 import { MatInputModule } from "@angular/material/input";
 import { CommonModule } from "@angular/common";
@@ -138,8 +131,6 @@ export class OrderComponent implements AfterViewInit, OnInit {
   orderAddForm: FormGroup;
 
   ngOnInit(): void {
-    this.createOrderAddForm();
-
     this.dropdownSettings = environment.getDropDownSetting;
 
     this.lookUpService.getGroupLookUp().subscribe((data) => {
@@ -167,11 +158,6 @@ export class OrderComponent implements AfterViewInit, OnInit {
         this.orderList = data;
         this.dataSource = new MatTableDataSource(data);
         this.configDataTable();
-
-        // Verinin doğru formatta olduğundan emin olun
-        this.dataSource.data.forEach((order) => {
-          console.log("Order:", order); // Kullanıcı verilerini kontrol etmek için
-        });
       },
       (error) => {
         console.error("Error fetching order list:", error);
@@ -180,14 +166,10 @@ export class OrderComponent implements AfterViewInit, OnInit {
   }
 
   clearFormGroup(group: FormGroup) {
-    group.markAsUntouched();
-    group.reset();
-    Object.keys(group.controls).forEach((key) => {
-      group.get(key).setErrors(null);
-      if (key === "id") group.get(key).setValue(0);
-      else if (key === "status") group.get(key).setValue(true);
+    group.reset({
+      id: 0,
+      status: true,
     });
-    console.log(group.controls); // Form kontrollerinin sıfırlanmış hallerini kontrol etmek için
   }
 
   setOrderId(id: number) {
@@ -213,15 +195,11 @@ export class OrderComponent implements AfterViewInit, OnInit {
         this.dataSource = new MatTableDataSource(this.orderList);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
-        this.alertifyService.success(
-          `Order ${StatusEnum[status].toLowerCase()} successfully`
-        );
+        this.alertifyService.success(`Order ${StatusEnum[status].toLowerCase()} successfully`);
       },
       (error) => {
-        console.error("Error response:", error); // Hata mesajını detaylı olarak yazdırın
-        this.alertifyService.error(
-          `Error ${StatusEnum[status].toLowerCase()} order`
-        );
+        console.error("Error response:", error);
+        this.alertifyService.error(`Error ${StatusEnum[status].toLowerCase()} order`);
       }
     );
   }

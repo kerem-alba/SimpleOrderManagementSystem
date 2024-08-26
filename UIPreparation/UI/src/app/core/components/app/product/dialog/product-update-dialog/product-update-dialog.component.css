@@ -1,0 +1,8 @@
+.color-box {
+  display: inline-block;
+  width: 20px;  
+  height: 20px;
+  margin-right: 8px; 
+  border: 1px solid #000000;
+  vertical-align: middle; 
+}

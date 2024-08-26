@@ -9,6 +9,8 @@ using Entities.Concrete;
 using System.Collections.Generic;
 using System;
 using Business.Handlers.Users.Commands;
+using Business.Handlers.Colors.Queries;
+using Nest;
 
 namespace WebAPI.Controllers
 {
@@ -52,6 +54,34 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var result = await Mediator.Send(new GetProductQuery { Id = id });
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return BadRequest(result.Message);
+        }
+
+        [Produces("application/json", "text/plain")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Product))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
+        [HttpGet("getColorsByProductAndSize")]
+        public async Task<IActionResult> GetColorsByProductAndSize([FromQuery] string productName, string size)
+        {
+            var result = await Mediator.Send(new GetColorsByProductNameAndSizeQuery { ProductName = productName, Size = size });
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return BadRequest(result.Message);
+        }
+
+        [Produces("application/json", "text/plain")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Product))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
+        [HttpGet("getProductByAttributes")]
+        public async Task<IActionResult> GetProductByAttributes([FromQuery] string productName, string size, int colorId)
+        {
+            var result = await Mediator.Send(new GetProductByAttributesQuery { ProductName = productName, Size = size, ColorId = colorId });
             if (result.Success)
             {
                 return Ok(result.Data);

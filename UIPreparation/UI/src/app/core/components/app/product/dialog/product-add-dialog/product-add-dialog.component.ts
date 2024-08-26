@@ -50,10 +50,11 @@ export class ProductAddDialogComponent implements OnInit {
   getColors(): void {
     this.colorService.getAll().subscribe(
       (data) => {
-        this.colors = data;
+        const filteredData = data.filter((x) => x.isDeleted == false);
+        this.colors = filteredData;
       },
       (error) => {
-        console.error("Error loading colors:", error);
+        console.error("Renkler yüklenirken hata oluştu:", error);
       }
     );
   }
@@ -67,6 +68,7 @@ export class ProductAddDialogComponent implements OnInit {
       if (result) {
         this.productAddForm.controls["colorId"].setValue(result.id);
         this.selectedColorId = result.id;
+        this.getColors();
       }
     });
   }

@@ -16,8 +16,8 @@
     </mat-form-field>
 
     <div>
-      <label>Color:</label>
-      <div class="color-list">
+      <label>Select Color:</label>
+      <div class="color-list mt-2">
         <div
           *ngFor="let color of colors"
           class="color-item"
@@ -26,7 +26,7 @@
             color: getContrastYIQ(color.code),
             border:
               selectedColorId === color.id
-                ? '3px solid black'
+                ? '4px solid black'
                 : '1px solid #ccc'
           }"
           (click)="selectColor(color)"

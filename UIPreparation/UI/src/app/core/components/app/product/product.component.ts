@@ -101,6 +101,10 @@ export class ProductComponent implements AfterViewInit, OnInit {
 
   product: Product = new Product();
   productList: Product[] = [];
+  colorList: Color[] = [];
+  colorCodesMap: { [key: number]: string } = {};
+  colorNamesMap: { [key: number]: string } = {};
+  colorCodesList: string[] = [];
   groupDropdownList: LookUp[];
   groupSelectedItems: LookUp[];
   dropdownSettings: IDropdownSettings;
@@ -141,7 +145,7 @@ export class ProductComponent implements AfterViewInit, OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      this.getProductList(); // Listesi güncelle
+      this.getProductList();
     });
   }
 
@@ -158,9 +162,10 @@ export class ProductComponent implements AfterViewInit, OnInit {
   ];
 
   ngOnInit(): void {
-    this.createProductAddForm();
-
     this.dropdownSettings = environment.getDropDownSetting;
+
+    this.getColorCodes();
+    this.getColorNames();
 
     this.lookUpService.getGroupLookUp().subscribe((data) => {
       this.groupDropdownList = data;
@@ -168,16 +173,6 @@ export class ProductComponent implements AfterViewInit, OnInit {
 
     this.lookUpService.getOperationClaimLookUp().subscribe((data) => {
       this.claimDropdownList = data;
-    });
-  }
-
-  createProductAddForm() {
-    this.productAddForm = this.formBuilder.group({
-      id: [0],
-      name: ["", Validators.required],
-      size: [null, Validators.required],
-      colorId: ["", Validators.required],
-      isDeleted: [false],
     });
   }
 
@@ -195,6 +190,22 @@ export class ProductComponent implements AfterViewInit, OnInit {
     );
   }
 
+  getColorCodes() {
+    this.colorService.getAll().subscribe((data) => {
+      data.forEach((color) => {
+        this.colorCodesMap[color.id] = color.code;
+      });
+    });
+  }
+
+  getColorNames() {
+    this.colorService.getAll().subscribe((data) => {
+      data.forEach((color) => {
+        this.colorNamesMap[color.id] = color.name;
+      });
+    });
+  }
+
   clearFormGroup(group: FormGroup) {
     group.markAsUntouched();
     group.reset();
@@ -208,14 +219,6 @@ export class ProductComponent implements AfterViewInit, OnInit {
 
   setProductId(id: number) {
     this.id = id;
-  }
-
-  getColorCode(colorId: number): string {
-    let color: Color = new Color();
-    this.colorService.getColorById(colorId).subscribe((data) => {
-      color = data;
-    });
-    return color.code;
   }
 
   save() {

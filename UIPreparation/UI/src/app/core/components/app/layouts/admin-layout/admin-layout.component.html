@@ -1,6 +1,8 @@
 <div class="wrapper">
   <div class="main-panel">
-    <app-navbar></app-navbar>
+    <div *ngIf="!isLoginPage()">
+      <app-navbar></app-navbar>
+    </div>
     <router-outlet></router-outlet>
     <app-footer></app-footer>
   </div>

@@ -4,37 +4,29 @@
       <div class="col-md-12">
         <div class="card">
           <div class="card-header card-header-danger">
-            <h4 class="card-title">Product List</h4>
+            <h4 class="card-title">Products</h4>
             <a
               *ngIf="checkClaim('CreateProductCommand')"
               class="pull-right"
               (click)="ProductAddDialog()"
             >
-              <i
-                style="color: white"
-                title="Add"
-                class="far fa-plus-square fa-2x"
-              ></i>
+              <i title="Add" class="far fa-plus-square fa-2x"></i>
             </a>
             <div class="col-md-4 pull-right">
               <mat-form-field>
                 <mat-label>Filter</mat-label>
-                <input
-                  matInput
-                  (keyup)="applyFilter($event)"
-                  placeholder=""
-                  #input
-                />
+                <input matInput (keyup)="applyFilter($event)" placeholder="" #input />
               </mat-form-field>
             </div>
           </div>
 
           <div class="card-body">
-            <mat-grid-list cols="8" rowHeight="3:5" gutterSize="16px">
+            <mat-grid-list cols="8" rowHeight="3:6" gutterSize="12px">
               <mat-grid-tile
+                class="mb-0"
                 *ngFor="let element of dataSource?.filteredData"
                 [colspan]="2"
-                [rowspan]="2"
+                [rowspan]="1"
               >
                 <mat-card class="product-card" appearance="outlined">
                   <mat-card-header>
@@ -44,59 +36,49 @@
                     </div>
                   </mat-card-header>
                   <mat-card-content>
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    sed do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua."
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                    incididunt ut labore et dolore magna aliqua."
                   </mat-card-content>
                   <mat-card-footer class="product-card-footer">
-                    <mat-chip-set>
+                    <mat-chip-set class="mx-3">
                       <mat-chip
-                        [ngStyle]="{
-                          'background-color': getColorCode(element.colorId)
-                        }"
-                        >Color: {{ element.colorId }}</mat-chip
-                      >
-                      <mat-chip>Size: {{ element.size }}</mat-chip>
+                        [style.background-color]="colorCodesMap[element.colorId]"
+                        class="w-25"
+                        title="{{ colorNamesMap[element.colorId] }}"
+                      ></mat-chip>
+                      <mat-chip id="size-chip">Size: {{ element.size }}</mat-chip>
                     </mat-chip-set>
                   </mat-card-footer>
 
                   <mat-card-actions>
-                    <div class="actions-flex-container">
-                      <div class="actions-button-container">
-                        <button
-                          class="action-button"
-                          id="edit-button"
-                          mat-fab
-                          extended
-                          *ngIf="checkClaim('UpdateProductCommand')"
+                    <div class="d-flex ms-auto">
+                      <div *ngIf="checkClaim('UpdateProductCommand')">
+                        <mat-icon
+                          class="mx-2"
                           (click)="ProductUpdateDialog(element.id)"
+                          style="cursor: pointer"
+                          title="Edit"
                         >
-                          <mat-icon>edit</mat-icon>
-                          Edit
-                        </button>
+                          edit
+                        </mat-icon>
                       </div>
-                      <div class="actions-button-container">
-                        <button
-                          class="action-button"
-                          id="delete-button"
-                          mat-fab
-                          extended
-                          *ngIf="checkClaim('DeleteProductCommand')"
+                      <div *ngIf="checkClaim('DeleteProductCommand')">
+                        <mat-icon
+                          class="mx-2"
                           (confirm)="deleteProduct(element.id)"
                           [swal]="deleteSwal"
+                          style="cursor: pointer; color: #d9534e"
+                          title="Delete"
                         >
-                          <mat-icon>delete</mat-icon>
-                          Delete
-                        </button>
+                          delete
+                        </mat-icon>
                       </div>
                     </div>
                   </mat-card-actions>
                 </mat-card>
               </mat-grid-tile>
             </mat-grid-list>
-            <mat-paginator
-              [pageSizeOptions]="[10, 25, 50, 100]"
-            ></mat-paginator>
+            <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]"></mat-paginator>
           </div>
         </div>
       </div>
