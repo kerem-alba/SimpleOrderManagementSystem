@@ -41,8 +41,8 @@ export class OrderService {
     return this.httpClient.request("delete", environment.getApiUrl + `/orders/${id}`);
   }
 
-  updateOrderStatus(id: number, status: string, quantity: number): Observable<any> {
-    const payload = { id, status, quantity };
+  updateOrderStatus(id: number, OrderStatus: string): Observable<any> {
+    const payload = { id, OrderStatus };
     return this.httpClient.put(environment.getApiUrl + `/orders/updateOrderStatus`, payload);
   }
 }

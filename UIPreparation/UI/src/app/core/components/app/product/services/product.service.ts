@@ -3,7 +3,6 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { Product } from "../models/Product";
 import { environment } from "../../../../../../environments/environment";
-import { LookUp } from "app/core/models/LookUp";
 import { Color } from "../../color/model/Color";
 import { ProductDto } from "../models/ProductDto";
 
@@ -24,7 +23,6 @@ export class ProductService {
 
   addProduct(product: Product): Observable<any> {
     const createProductCommand = { Product: product };
-    console.log("Gönderilen ürün:", createProductCommand);
     var result = this.httpClient.post(environment.getApiUrl + "/products/", createProductCommand, {
       responseType: "text",
     });

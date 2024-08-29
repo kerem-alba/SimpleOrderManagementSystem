@@ -10,23 +10,16 @@ import { Product } from "./models/Product";
 import { ProductService } from "./services/product.service";
 import { Color } from ".././color/model/Color";
 import { ColorService } from ".././color/service/color.service";
-
-import { IDropdownSettings, NgMultiSelectDropDownModule } from "ng-multiselect-dropdown";
-import { LookUp } from "app/core/models/LookUp";
 import { AlertifyService } from "app/core/services/alertify.service";
-import { LookUpService } from "app/core/services/LookUp.service";
-import { MustMatch } from "app/core/directives/must-match";
-import { environment } from "environments/environment";
 import { MatSort, MatSortModule } from "@angular/material/sort";
 import { MatPaginator, MatPaginatorModule } from "@angular/material/paginator";
 import { MatTableDataSource, MatTableModule } from "@angular/material/table";
 import { AuthService } from "../../admin/login/services/auth.service";
 import { SweetAlert2Module } from "@sweetalert2/ngx-sweetalert2";
-import { MatFormField, MatFormFieldModule, MatLabel } from "@angular/material/form-field";
-import { MatButtonModule, MatIconButton } from "@angular/material/button";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatButtonModule } from "@angular/material/button";
 import { MatInputModule } from "@angular/material/input";
 import { CommonModule } from "@angular/common";
-import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatRippleModule } from "@angular/material/core";
 import { MatSelectModule } from "@angular/material/select";
 import { MatTooltipModule } from "@angular/material/tooltip";
@@ -54,27 +47,18 @@ import { MatIconModule } from "@angular/material/icon";
     MatPaginatorModule,
     MatSortModule,
     MatTableModule,
-    MatCheckboxModule,
-    NgMultiSelectDropDownModule,
     SweetAlert2Module,
     MatRippleModule,
-    MatFormFieldModule,
-    MatInputModule,
     MatSelectModule,
     MatTooltipModule,
     TranslateModule,
     MatDialogModule,
-    MatIconButton,
-    MatSortModule,
-    MatTableModule,
     MatGridListModule,
     MatCardModule,
     MatChipsModule,
     MatDividerModule,
     MatIconModule,
   ],
-
-  providers: [SweetAlert2Module.forRoot().providers],
 
   templateUrl: "./product.component.html",
   styleUrls: ["./product.component.scss"],
@@ -91,15 +75,7 @@ export class ProductComponent implements AfterViewInit, OnInit {
   colorCodesMap: { [key: number]: string } = {};
   colorNamesMap: { [key: number]: string } = {};
   colorCodesList: string[] = [];
-  groupDropdownList: LookUp[];
-  groupSelectedItems: LookUp[];
-  dropdownSettings: IDropdownSettings;
-
-  claimDropdownList: LookUp[];
-  claimSelectedItems: LookUp[];
-
-  isGroupChange: boolean = false;
-  isClaimChange: boolean = false;
+  uniqueProductNames: string[] = [];
 
   id: number;
   Filter: string = "";
@@ -107,9 +83,7 @@ export class ProductComponent implements AfterViewInit, OnInit {
   constructor(
     private productService: ProductService,
     private colorService: ColorService,
-    private formBuilder: FormBuilder,
     private alertifyService: AlertifyService,
-    private lookUpService: LookUpService,
     private authService: AuthService,
     public dialog: MatDialog
   ) {}
@@ -120,7 +94,7 @@ export class ProductComponent implements AfterViewInit, OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      this.getProductList(); // Listesi güncelle
+      this.getProductList();
     });
   }
 
@@ -148,30 +122,25 @@ export class ProductComponent implements AfterViewInit, OnInit {
   ];
 
   ngOnInit(): void {
-    this.dropdownSettings = environment.getDropDownSetting;
-
     this.getColorCodes();
     this.getColorNames();
-
-    this.lookUpService.getGroupLookUp().subscribe((data) => {
-      this.groupDropdownList = data;
-    });
-
-    this.lookUpService.getOperationClaimLookUp().subscribe((data) => {
-      this.claimDropdownList = data;
-    });
   }
 
   getProductList() {
     this.productService.getProductList().subscribe(
       (data) => {
-        const filteredData = data.filter((x) => x.isDeleted == false);
-        this.productList = filteredData;
-        this.dataSource = new MatTableDataSource(filteredData);
+        const sortedData = data
+          .filter((x) => !x.isDeleted)
+          .sort((a, b) => a.name.localeCompare(b.name));
+        this.productList = sortedData;
+        this.dataSource = new MatTableDataSource(sortedData);
         this.configDataTable();
+
+        this.uniqueProductNames = Array.from(new Set(sortedData.map((item) => item.name)));
+        console.log(this.uniqueProductNames);
       },
       (error) => {
-        console.error("Error fetching product list:", error);
+        this.alertifyService.error("Error getting product list.");
       }
     );
   }
@@ -200,28 +169,16 @@ export class ProductComponent implements AfterViewInit, OnInit {
       if (key === "id") group.get(key).setValue(0);
       else if (key === "status") group.get(key).setValue(true);
     });
-    console.log(group.controls);
-  }
-
-  setProductId(id: number) {
-    this.id = id;
   }
 
   save() {
     if (this.productAddForm.valid) {
-      console.log("Form submitted", this.productAddForm.value);
-      this.product = Object.assign({}, this.productAddForm.value);
+      this.product = this.productAddForm.value;
 
       if (this.product.id == 0) this.addProduct();
       else this.updateProduct();
     } else {
-      console.log("Form is invalid");
-      console.log(this.productAddForm.controls); // Kontrol edilecek alanlar
-      for (const control in this.productAddForm.controls) {
-        if (this.productAddForm.controls[control].errors) {
-          console.log(`Error in ${control}:`, this.productAddForm.controls[control].errors);
-        }
-      }
+      this.alertifyService.error("Error adding product. Please check the form and try again.");
     }
   }
 
@@ -234,7 +191,7 @@ export class ProductComponent implements AfterViewInit, OnInit {
         this.clearFormGroup(this.productAddForm);
       },
       (error) => {
-        console.error("Error adding product:", error);
+        this.alertifyService.error("Error adding product.");
       }
     );
   }
@@ -249,22 +206,28 @@ export class ProductComponent implements AfterViewInit, OnInit {
 
   updateProduct() {
     this.productService.updateProduct(this.product).subscribe((data) => {
-      var index = this.productList.findIndex((x) => x.id == this.product.id);
-      this.productList[index] = this.product;
       this.dataSource = new MatTableDataSource(this.productList);
       this.configDataTable();
-      this.product = new Product();
       this.alertifyService.success(data);
       this.clearFormGroup(this.productAddForm);
     });
   }
 
   deleteProduct(id: number) {
-    console.log("Delete customer with id:", id);
     this.productService.deleteProduct(id).subscribe((data) => {
       this.alertifyService.success(data.toString());
       this.getProductList();
     });
+  }
+
+  filterProductsByName(name: string) {
+    const filteredProducts = this.productList.filter((product) => product.name === name);
+    this.dataSource = new MatTableDataSource(filteredProducts);
+    this.configDataTable();
+  }
+  showAllProducts() {
+    this.dataSource = new MatTableDataSource(this.productList);
+    this.configDataTable();
   }
 
   checkClaim(claim: string): boolean {

@@ -36,7 +36,10 @@ namespace Business.Handlers.Users.Queries
             public async Task<IDataResult<IEnumerable<GetUserDto>>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
             {
                 var userList = await _userRepository.GetListAsync();
-                var userDtoList = userList.Select(user => _mapper.Map<GetUserDto>(user)).ToList();
+
+                var filteredUserList = userList.Where(user => !user.IsDeleted).ToList();
+
+                var userDtoList = filteredUserList.Select(user => _mapper.Map<GetUserDto>(user)).ToList();
 
                 return new SuccessDataResult<IEnumerable<GetUserDto>>(userDtoList);
             }

@@ -30,7 +30,6 @@ import { MatGridListModule } from "@angular/material/grid-list";
 import { MatDividerModule } from "@angular/material/divider";
 import { MatIconModule } from "@angular/material/icon";
 import { data } from "jquery";
-import { HttpErrorResponse } from "@angular/common/http";
 
 @Component({
   selector: "order",
@@ -141,15 +140,39 @@ export class OrderComponent implements OnInit {
     });
   }
 
-  updateOrderStatus(id: number, status: string, quantity: number) {
-    this.orderService.updateOrderStatus(id, status, quantity).subscribe(
-      (data) => {
+  updateOrderStatus(id: number, OrderStatus: string) {
+    this.orderService.getOrderById(id).subscribe((order) => {
+      if (OrderStatus === "Approved") {
+        this.stockService
+          .getStockQuantityByProductId(order.productId)
+          .subscribe((stockQuantity) => {
+            console.log("Stock Quantity:", stockQuantity);
+            if (!stockQuantity) {
+              this.alertifyService.error("No stocks available for this product.");
+              return;
+            }
+
+            if (stockQuantity < order.quantity) {
+              this.alertifyService.error("Insufficient stock quantity.");
+              return;
+            }
+
+            this.sendUpdateOrderStatusRequest(id, OrderStatus);
+          });
+      } else {
+        this.sendUpdateOrderStatusRequest(id, OrderStatus);
+      }
+    });
+  }
+
+  sendUpdateOrderStatusRequest(id: number, OrderStatus: string) {
+    this.orderService.updateOrderStatus(id, OrderStatus).subscribe(
+      () => {
         this.alertifyService.success("Order status updated successfully");
         this.getOrderList();
       },
-      (error: HttpErrorResponse) => {
-        const errorMessage = error.error?.message || "Failed to update order status";
-        this.alertifyService.error(errorMessage);
+      () => {
+        this.alertifyService.error("Failed to update order status.");
       }
     );
   }

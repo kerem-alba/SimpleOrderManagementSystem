@@ -43,7 +43,7 @@ namespace Business.Handlers.Orders.Commands
                 {
                     return new ErrorResult(Messages.UserNotFound);
                 }
-                await _orderRepository.UpdateOrderStatus(request.Id, request.OrderStatus, request.Quantity);
+                await _orderRepository.UpdateOrderStatus(request.Id, request.OrderStatus.ToString());
 
                 await _orderRepository.SaveChangesAsync();
                 return new SuccessResult(string.Empty);

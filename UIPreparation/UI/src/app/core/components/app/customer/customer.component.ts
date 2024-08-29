@@ -1,36 +1,17 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
-import {
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from "@angular/forms";
+import { FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { Customer } from "./model/Customer";
 import { CustomerService } from "./services/customer.service";
-import {
-  IDropdownSettings,
-  NgMultiSelectDropDownModule,
-} from "ng-multiselect-dropdown";
-import { LookUp } from "app/core/models/LookUp";
 import { AlertifyService } from "app/core/services/alertify.service";
-import { LookUpService } from "app/core/services/LookUp.service";
-import { MustMatch } from "app/core/directives/must-match";
-import { environment } from "environments/environment";
 import { MatSort, MatSortModule } from "@angular/material/sort";
 import { MatPaginator, MatPaginatorModule } from "@angular/material/paginator";
 import { MatTableDataSource, MatTableModule } from "@angular/material/table";
 import { AuthService } from "../../admin/login/services/auth.service";
 import { SweetAlert2Module } from "@sweetalert2/ngx-sweetalert2";
-import {
-  MatFormField,
-  MatFormFieldModule,
-  MatLabel,
-} from "@angular/material/form-field";
+import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatButtonModule, MatIconButton } from "@angular/material/button";
 import { MatInputModule } from "@angular/material/input";
 import { CommonModule } from "@angular/common";
-import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatRippleModule } from "@angular/material/core";
 import { MatSelectModule } from "@angular/material/select";
 import { MatTooltipModule } from "@angular/material/tooltip";
@@ -39,8 +20,6 @@ import { CustomerAddDialogComponent } from "./dialog/customer-add-dialog/custome
 import { CustomerUpdateDialogComponent } from "./dialog/customer-update-dialog/customer-update-dialog/customer-update-dialog.component";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { MatGridListModule } from "@angular/material/grid-list";
-import { MatCardModule } from "@angular/material/card";
-import { MatChipsModule } from "@angular/material/chips";
 import { MatDividerModule } from "@angular/material/divider";
 import { MatIconModule } from "@angular/material/icon";
 
@@ -57,8 +36,6 @@ import { MatIconModule } from "@angular/material/icon";
     MatPaginatorModule,
     MatSortModule,
     MatTableModule,
-    MatCheckboxModule,
-    NgMultiSelectDropDownModule,
     SweetAlert2Module,
     MatRippleModule,
     MatFormFieldModule,
@@ -71,13 +48,9 @@ import { MatIconModule } from "@angular/material/icon";
     MatSortModule,
     MatTableModule,
     MatGridListModule,
-    MatCardModule,
-    MatChipsModule,
     MatDividerModule,
     MatIconModule,
   ],
-
-  providers: [SweetAlert2Module.forRoot().providers],
 
   templateUrl: "./customer.component.html",
   styleUrls: ["./customer.component.css"],
@@ -88,8 +61,8 @@ export class CustomerComponent implements AfterViewInit, OnInit {
   @ViewChild(MatSort) sort: MatSort;
   displayedColumns: string[] = [
     "customerId",
-    "email",
     "fullName",
+    "email",
     "mobilePhones",
     "address",
     "update",
@@ -98,12 +71,6 @@ export class CustomerComponent implements AfterViewInit, OnInit {
 
   customer: Customer = new Customer();
   customerList: Customer[] = [];
-  groupDropdownList: LookUp[];
-  groupSelectedItems: LookUp[];
-  dropdownSettings: IDropdownSettings;
-
-  claimDropdownList: LookUp[];
-  claimSelectedItems: LookUp[];
 
   isGroupChange: boolean = false;
   isClaimChange: boolean = false;
@@ -113,9 +80,7 @@ export class CustomerComponent implements AfterViewInit, OnInit {
 
   constructor(
     private customerService: CustomerService,
-    private formBuilder: FormBuilder,
     private alertifyService: AlertifyService,
-    private lookUpService: LookUpService,
     private authService: AuthService,
     public dialog: MatDialog
   ) {}
@@ -147,31 +112,7 @@ export class CustomerComponent implements AfterViewInit, OnInit {
 
   customerAddForm: FormGroup;
 
-  ngOnInit(): void {
-    this.createCustomerAddForm();
-
-    this.dropdownSettings = environment.getDropDownSetting;
-
-    this.lookUpService.getGroupLookUp().subscribe((data) => {
-      this.groupDropdownList = data;
-    });
-
-    this.lookUpService.getOperationClaimLookUp().subscribe((data) => {
-      this.claimDropdownList = data;
-    });
-  }
-
-  createCustomerAddForm() {
-    this.customerAddForm = this.formBuilder.group({
-      id: [0],
-      customerName: ["", Validators.required],
-      customerCode: ["", Validators.required],
-      adress: ["", Validators.required],
-      phoneNumber: ["", Validators.required],
-      email: ["", [Validators.required, Validators.email]],
-      status: [true],
-    });
-  }
+  ngOnInit(): void {}
 
   getCustomerList() {
     this.customerService.getCustomerList().subscribe(
@@ -182,7 +123,7 @@ export class CustomerComponent implements AfterViewInit, OnInit {
         this.configDataTable();
       },
       (error) => {
-        console.error("Error fetching customer list:", error);
+        this.alertifyService.error("Error getting customers");
       }
     );
   }
@@ -195,11 +136,6 @@ export class CustomerComponent implements AfterViewInit, OnInit {
       if (key === "id") group.get(key).setValue(0);
       else if (key === "status") group.get(key).setValue(true);
     });
-    console.log(group.controls); // Form kontrollerinin sıfırlanmış hallerini kontrol etmek için
-  }
-
-  setCustomerId(id: number) {
-    this.id = id;
   }
 
   save() {
@@ -210,16 +146,7 @@ export class CustomerComponent implements AfterViewInit, OnInit {
       if (this.customer.id == 0) this.addCustomer();
       else this.updateCustomer();
     } else {
-      console.log("Form is invalid");
-      console.log(this.customerAddForm.controls); // Kontrol edilecek alanlar
-      for (const control in this.customerAddForm.controls) {
-        if (this.customerAddForm.controls[control].errors) {
-          console.log(
-            `Error in ${control}:`,
-            this.customerAddForm.controls[control].errors
-          );
-        }
-      }
+      this.alertifyService.error("Please fill in the required fields");
     }
   }
 
@@ -232,7 +159,7 @@ export class CustomerComponent implements AfterViewInit, OnInit {
         this.clearFormGroup(this.customerAddForm);
       },
       (error) => {
-        console.error("Error adding customer:", error);
+        this.alertifyService.error("Error adding customer");
       }
     );
   }
@@ -247,11 +174,8 @@ export class CustomerComponent implements AfterViewInit, OnInit {
 
   updateCustomer() {
     this.customerService.updateCustomer(this.customer).subscribe((data) => {
-      var index = this.customerList.findIndex((x) => x.id == this.customer.id);
-      this.customerList[index] = this.customer;
       this.dataSource = new MatTableDataSource(this.customerList);
       this.configDataTable();
-      this.customer = new Customer();
       this.alertifyService.success(data);
       this.clearFormGroup(this.customerAddForm);
     });

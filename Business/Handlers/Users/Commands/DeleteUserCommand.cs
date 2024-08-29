@@ -31,7 +31,7 @@ namespace Business.Handlers.Users.Commands
             {
                 var userToDelete = _userRepository.Get(p => p.UserId == request.UserId);
 
-                userToDelete.Status = false;
+                userToDelete.IsDeleted = true;
                 _userRepository.Update(userToDelete);
                 await _userRepository.SaveChangesAsync();
                 return new SuccessResult(Messages.Deleted);

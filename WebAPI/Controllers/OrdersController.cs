@@ -140,14 +140,25 @@ namespace WebAPI.Controllers
         [HttpPut("updateOrderStatus")]
         public async Task<IActionResult> UpdateOrderStatus([FromBody] UpdateOrderStatusCommand command)
         {
-            var result = await Mediator.Send(command);
-            if (result.Success)
+            try
             {
-                return Ok(result.Message);
+                var result = await Mediator.Send(command);
+                if (result.Success)
+                {
+                    return Ok(result.Message);
+                }
+                return BadRequest(new { message = result.Message });
             }
-            return BadRequest(new { message = result.Message });
-
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An unexpected error occurred.", details = ex.Message });
+            }
         }
+
 
 
 

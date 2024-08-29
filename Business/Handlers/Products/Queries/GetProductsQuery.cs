@@ -34,7 +34,7 @@ namespace Business.Handlers.Products.Queries
             [SecuredOperation(Priority = 1)]
             public async Task<IDataResult<IEnumerable<Product>>> Handle(GetProductsQuery request, CancellationToken cancellationToken)
             {
-                return new SuccessDataResult<IEnumerable<Product>>(await _productRepository.GetListAsync());
+                return new SuccessDataResult<IEnumerable<Product>>(await _productRepository.GetListAsync((p => !p.IsDeleted)));
             }
         }
     }

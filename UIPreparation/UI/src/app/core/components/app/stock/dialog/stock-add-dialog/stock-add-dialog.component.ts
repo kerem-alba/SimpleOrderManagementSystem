@@ -41,8 +41,7 @@ export class StockAddDialogComponent implements OnInit {
 
   loadProducts() {
     this.productService.getProductWithColorAttributes().subscribe((products) => {
-      this.products = products;
-      console.log("Products:", this.products);
+      this.products = products.sort((a, b) => a.name.localeCompare(b.name));
     });
   }
 

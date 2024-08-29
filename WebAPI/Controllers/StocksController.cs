@@ -123,5 +123,21 @@ namespace WebAPI.Controllers
         {
             return GetResponseOnlyResultMessage(await Mediator.Send(new DeleteStockCommand { Id = id }));
         }
+
+
+        [Produces("application/json", "text/plain")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<int>))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
+        [HttpGet("getbyproductid")]
+        public async Task<IActionResult> GetStockQuantityByProductId([FromQuery] int id)
+        {
+            var result = await Mediator.Send(new GetStockQuantityByProductIdQuery { ProductId = id });
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return BadRequest(result.Message);
+        }
+
     }
 }

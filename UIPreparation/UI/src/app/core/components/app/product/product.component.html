@@ -5,19 +5,34 @@
         <div class="card">
           <div class="card-header card-header-danger">
             <h4 class="card-title">Products</h4>
-            <a
-              *ngIf="checkClaim('CreateProductCommand')"
-              class="pull-right"
-              (click)="ProductAddDialog()"
-            >
-              <i title="Add" class="far fa-plus-square fa-2x"></i>
-            </a>
+            <div>
+              <a
+                *ngIf="checkClaim('CreateProductCommand')"
+                class="pull-right"
+                (click)="ProductAddDialog()"
+              >
+                <i title="Add" class="far fa-plus-square fa-2x"></i>
+              </a>
+            </div>
+
             <div class="col-md-4 pull-right">
               <mat-form-field>
                 <mat-label>Filter</mat-label>
                 <input matInput (keyup)="applyFilter($event)" placeholder="" #input />
               </mat-form-field>
             </div>
+          </div>
+
+          <div class="product-filters">
+            <button mat-raised-button (click)="showAllProducts()">Show All</button>
+
+            <button
+              mat-button
+              *ngFor="let name of uniqueProductNames"
+              (click)="filterProductsByName(name)"
+            >
+              {{ name }}
+            </button>
           </div>
 
           <div class="card-body">
@@ -36,8 +51,7 @@
                     </div>
                   </mat-card-header>
                   <mat-card-content>
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                    incididunt ut labore et dolore magna aliqua."
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.
                   </mat-card-content>
                   <mat-card-footer class="product-card-footer">
                     <mat-chip-set class="mx-3">

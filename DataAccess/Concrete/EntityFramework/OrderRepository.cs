@@ -41,7 +41,7 @@ namespace DataAccess.Concrete.EntityFramework
             return orders;
         }
 
-        public async Task UpdateOrderStatus(int orderId, string OrderStatus, int quantity)
+        public async Task UpdateOrderStatus(int orderId, string OrderStatus)
         {
             var order = await GetAsync(p => p.Id == orderId);
             if (order == null)
@@ -50,16 +50,17 @@ namespace DataAccess.Concrete.EntityFramework
             }
 
             var stock = await _stockRepository.GetAsync(s => s.ProductId == order.ProductId);
-            if (stock == null)
-            {
-                throw new InvalidOperationException("No stocks for this product.");
-            }
+
 
             if (OrderStatus == "Approved")
             {
-                if (stock.Quantity >= quantity)
+                if (stock == null)
                 {
-                    stock.Quantity -= quantity;
+                    throw new InvalidOperationException("No stocks for this product.");
+                }
+                if (stock.Quantity >= order.Quantity && stock.IsReadyForSale)
+                {
+                    stock.Quantity -= order.Quantity;
                     _stockRepository.Update(stock);
                     order.OrderStatus = StatusEnum.Approved;
                 }
@@ -72,7 +73,7 @@ namespace DataAccess.Concrete.EntityFramework
             {
                 if (order.OrderStatus == StatusEnum.Approved)
                 {
-                    stock.Quantity += quantity;
+                    stock.Quantity += order.Quantity;
                     _stockRepository.Update(stock);
                 }
                 order.OrderStatus = StatusEnum.Cancelled;
@@ -81,7 +82,7 @@ namespace DataAccess.Concrete.EntityFramework
             {
                 if (order.OrderStatus == StatusEnum.Approved)
                 {
-                    stock.Quantity += quantity;
+                    stock.Quantity += order.Quantity;
                     _stockRepository.Update(stock);
                 }
                 order.OrderStatus = StatusEnum.Rejected;
