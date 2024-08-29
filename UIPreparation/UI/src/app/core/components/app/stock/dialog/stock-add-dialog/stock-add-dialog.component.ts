@@ -27,6 +27,7 @@ export class StockAddDialogComponent implements OnInit {
   ngOnInit(): void {
     this.createStockAddForm();
     this.loadProducts();
+    this.sortProductsAlphabetically();
   }
 
   createStockAddForm() {
@@ -39,9 +40,14 @@ export class StockAddDialogComponent implements OnInit {
   }
 
   loadProducts() {
-    this.productService.getProductList().subscribe((products) => {
+    this.productService.getProductWithColorAttributes().subscribe((products) => {
       this.products = products;
+      console.log("Products:", this.products);
     });
+  }
+
+  sortProductsAlphabetically(): void {
+    this.products.sort((a, b) => a.name.localeCompare(b.name));
   }
 
   save() {
@@ -54,8 +60,7 @@ export class StockAddDialogComponent implements OnInit {
           this.dialogRef.close();
         },
         (error) => {
-          console.error("Error creating stock:", error);
-          this.alertify.error("Error creating stock");
+          this.alertify.error("Stock of this product already exists. Please update the stock.");
         }
       );
     }

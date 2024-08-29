@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Core.Enums;
 using Nest;
+using Entities.Dtos;
 namespace DataAccess.Concrete.EntityFramework
 {
     public class ProductRepository : EfEntityRepositoryBase<Product, ProjectDbContext>, IProductRepository
@@ -24,8 +25,8 @@ namespace DataAccess.Concrete.EntityFramework
             {
                 var colors = await Context.Products
                     .Where(p => p.Name == productName && p.Size == parsedSize && !p.IsDeleted)
-                    .Select(p => p.Color)  
-                    .Distinct()  
+                    .Select(p => p.Color)
+                    .Distinct()
                     .ToListAsync();
 
                 return colors;
@@ -50,5 +51,24 @@ namespace DataAccess.Concrete.EntityFramework
                 return new Product();
             }
         }
+
+        public async Task<IEnumerable<ProductDto>> GetProductsWithColorAttributesQuery()
+        {
+            var productsWithColorAttributes = await (from p in Context.Products
+                                                     join c in Context.Color on p.ColorId equals c.Id
+                                                     where !p.IsDeleted && !c.IsDeleted
+                                                     select new ProductDto
+                                                     {
+                                                         Id = p.Id,
+                                                         Name = p.Name,
+                                                         Size = p.Size,
+                                                         ColorId = c.Id,
+                                                         ColorCode = c.Code,
+                                                         ColorName = c.Name
+                                                     }).ToListAsync();
+
+            return productsWithColorAttributes;
+        }
+
     }
 }

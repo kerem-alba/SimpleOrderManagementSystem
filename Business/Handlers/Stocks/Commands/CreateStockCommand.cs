@@ -43,7 +43,7 @@ namespace Business.Handlers.Stocks.Commands
             [SecuredOperation(Priority = 1)]
             public async Task<IResult> Handle(CreateStockCommand request, CancellationToken cancellationToken)
             {
-                var isThereStockRecord = _stockRepository.Query().Any(u => u.ProductId == request.ProductId);
+                var isThereStockRecord = _stockRepository.Query().Any(u => u.ProductId == request.ProductId && !u.IsDeleted);
 
                 if (isThereStockRecord == true)
                     return new ErrorResult(Messages.NameAlreadyExist);

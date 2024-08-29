@@ -8,29 +8,17 @@ import {
 } from "@angular/forms";
 import { Stock } from "./model/Stock";
 import { StockService } from "./services/stock.service";
-import {
-  IDropdownSettings,
-  NgMultiSelectDropDownModule,
-} from "ng-multiselect-dropdown";
-import { LookUp } from "app/core/models/LookUp";
 import { AlertifyService } from "app/core/services/alertify.service";
 import { LookUpService } from "app/core/services/LookUp.service";
-import { MustMatch } from "app/core/directives/must-match";
-import { environment } from "environments/environment";
 import { MatSort, MatSortModule } from "@angular/material/sort";
 import { MatPaginator, MatPaginatorModule } from "@angular/material/paginator";
 import { MatTableDataSource, MatTableModule } from "@angular/material/table";
 import { AuthService } from "app/core/components/admin/login/services/auth.service";
 import { SweetAlert2Module } from "@sweetalert2/ngx-sweetalert2";
-import {
-  MatFormField,
-  MatFormFieldModule,
-  MatLabel,
-} from "@angular/material/form-field";
+import { MatFormFieldModule, MatLabel } from "@angular/material/form-field";
 import { MatButtonModule, MatIconButton } from "@angular/material/button";
 import { MatInputModule } from "@angular/material/input";
 import { CommonModule } from "@angular/common";
-import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatRippleModule } from "@angular/material/core";
 import { MatSelectModule } from "@angular/material/select";
 import { MatTooltipModule } from "@angular/material/tooltip";
@@ -39,11 +27,7 @@ import { StockAddDialogComponent } from "./dialog/stock-add-dialog/stock-add-dia
 import { StockUpdateDialogComponent } from "./dialog/stock-update-dialog/stock-update-dialog.component";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { MatGridListModule } from "@angular/material/grid-list";
-import { MatCardModule } from "@angular/material/card";
-import { MatChipsModule } from "@angular/material/chips";
-import { MatDividerModule } from "@angular/material/divider";
 import { MatIconModule } from "@angular/material/icon";
-import { get } from "jquery";
 
 @Component({
   selector: "stock",
@@ -58,8 +42,6 @@ import { get } from "jquery";
     MatPaginatorModule,
     MatSortModule,
     MatTableModule,
-    MatCheckboxModule,
-    NgMultiSelectDropDownModule,
     SweetAlert2Module,
     MatRippleModule,
     MatFormFieldModule,
@@ -72,9 +54,6 @@ import { get } from "jquery";
     MatSortModule,
     MatTableModule,
     MatGridListModule,
-    MatCardModule,
-    MatChipsModule,
-    MatDividerModule,
     MatIconModule,
   ],
 
@@ -83,13 +62,15 @@ import { get } from "jquery";
   templateUrl: "./stock.component.html",
   styleUrls: ["./stock.component.css"],
 })
-export class StockComponent implements AfterViewInit, OnInit {
+export class StockComponent implements OnInit {
   dataSource: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   displayedColumns: string[] = [
     "stockId",
     "productName",
+    "productSize",
+    "productColor",
     "quantity",
     "readyForSale",
     "approve",
@@ -99,15 +80,6 @@ export class StockComponent implements AfterViewInit, OnInit {
 
   stock: Stock = new Stock();
   stockList: Stock[] = [];
-  groupDropdownList: LookUp[];
-  groupSelectedItems: LookUp[];
-  dropdownSettings: IDropdownSettings;
-
-  claimDropdownList: LookUp[];
-  claimSelectedItems: LookUp[];
-
-  isGroupChange: boolean = false;
-  isClaimChange: boolean = false;
 
   id: number;
   Filter: string = "";
@@ -142,22 +114,10 @@ export class StockComponent implements AfterViewInit, OnInit {
     });
   }
 
-  ngAfterViewInit(): void {
-    this.getStockList();
-  }
-
   stockAddForm: FormGroup;
 
   ngOnInit(): void {
-    this.dropdownSettings = environment.getDropDownSetting;
-
-    this.lookUpService.getGroupLookUp().subscribe((data) => {
-      this.groupDropdownList = data;
-    });
-
-    this.lookUpService.getOperationClaimLookUp().subscribe((data) => {
-      this.claimDropdownList = data;
-    });
+    this.getStockList();
   }
 
   getStockList() {
@@ -176,14 +136,10 @@ export class StockComponent implements AfterViewInit, OnInit {
   }
 
   clearFormGroup(group: FormGroup) {
-    group.markAsUntouched();
-    group.reset();
-    Object.keys(group.controls).forEach((key) => {
-      group.get(key).setErrors(null);
-      if (key === "id") group.get(key).setValue(0);
-      else if (key === "status") group.get(key).setValue(true);
+    group.reset({
+      id: 0,
+      status: true,
     });
-    console.log(group.controls);
   }
 
   save() {
@@ -194,14 +150,9 @@ export class StockComponent implements AfterViewInit, OnInit {
       if (this.stock.id == 0) this.addStock();
       else this.updateStock();
     } else {
-      console.log("Form is invalid");
-      console.log(this.stockAddForm.controls);
       for (const control in this.stockAddForm.controls) {
         if (this.stockAddForm.controls[control].errors) {
-          console.log(
-            `Error in ${control}:`,
-            this.stockAddForm.controls[control].errors
-          );
+          console.log(`Error in ${control}:`, this.stockAddForm.controls[control].errors);
         }
       }
     }
@@ -262,13 +213,17 @@ export class StockComponent implements AfterViewInit, OnInit {
   }
 
   deleteStock(id: number) {
-    this.stockService.deleteStock(id).subscribe((data) => {
-      this.alertifyService.success(data.toString());
-      var index = this.stockList.findIndex((x) => x.id == id);
-      this.stockList[index].isDeleted = false;
-      this.dataSource = new MatTableDataSource(this.stockList);
-      this.configDataTable();
-    });
+    this.stockService.deleteStock(id).subscribe(
+      (data) => {
+        this.alertifyService.success("Stock deleted successfully.");
+        this.stockList = this.stockList.filter((x) => x.id !== id);
+        this.dataSource = new MatTableDataSource(this.stockList);
+        this.configDataTable();
+      },
+      (error) => {
+        this.alertifyService.error("An error occurred while deleting the stock.");
+      }
+    );
   }
 
   confirmForSale(id: number) {

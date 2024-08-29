@@ -123,7 +123,7 @@ export class OrderAddDialogComponent implements OnInit {
 
           this.orderService.addOrder(orderData).subscribe(
             (response) => {
-              this.alertify.success("Order created successfully");
+              this.alertify.success(response);
               this.dialogRef.close();
             },
             (error) => {

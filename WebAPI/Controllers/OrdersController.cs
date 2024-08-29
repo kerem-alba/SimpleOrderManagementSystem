@@ -106,8 +106,6 @@ namespace WebAPI.Controllers
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] UpdateOrderCommand updateOrder)
         {
-            Console.WriteLine("Güncellenen sipariş ID: " + updateOrder.Id);
-            Console.WriteLine("Yeni durum: " + updateOrder.OrderStatus);
             var result = await Mediator.Send(updateOrder);
             if (result.Success)
             {
@@ -124,10 +122,10 @@ namespace WebAPI.Controllers
         [Produces("application/json", "text/plain")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-        [HttpDelete]
-        public async Task<IActionResult> Delete([FromBody] DeleteOrderCommand deleteOrder)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            var result = await Mediator.Send(deleteOrder);
+            var result = await Mediator.Send(new DeleteOrderCommand { Id = id });
             if (result.Success)
             {
                 return Ok(result.Message);
@@ -139,17 +137,18 @@ namespace WebAPI.Controllers
         [Produces("application/json", "text/plain")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-        [HttpPost("approve")]
-        public async Task<IActionResult> ApproveOrder([FromBody] ApproveOrderCommand approveOrder)
+        [HttpPut("updateOrderStatus")]
+        public async Task<IActionResult> UpdateOrderStatus([FromBody] UpdateOrderStatusCommand command)
         {
-            var result = await Mediator.Send(approveOrder);
+            var result = await Mediator.Send(command);
             if (result.Success)
             {
                 return Ok(result.Message);
             }
+            return BadRequest(new { message = result.Message });
 
-            return BadRequest(result.Message);
         }
+
 
 
     }

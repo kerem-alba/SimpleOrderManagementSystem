@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using Entities.Dtos;
 using Microsoft.EntityFrameworkCore;
+using Nest;
 namespace DataAccess.Concrete.EntityFramework
 {
     public class StockRepository : EfEntityRepositoryBase<Stock, ProjectDbContext>, IStockRepository
@@ -19,19 +20,22 @@ namespace DataAccess.Concrete.EntityFramework
 
         public async Task<IEnumerable<StockDto>> GetStockDetailsAsync()
         {
-            var result = await Context.Stocks
-                .Include(s => s.Product)
-                .Select(s => new StockDto
-                {
-                    Id = s.Id,
-                    ProductName = s.Product.Name,
-                    ProductId = s.ProductId,
-                    Quantity = s.Quantity,
-                    IsReadyForSale = s.IsReadyForSale,
-                    IsDeleted = s.IsDeleted,
-                }).ToListAsync();
+            var stocks = await (from s in Context.Stocks
+                                join p in Context.Products on s.ProductId equals p.Id
+                                join c in Context.Color on p.ColorId equals c.Id
+                                where !s.IsDeleted && !p.IsDeleted
+                                select new StockDto
+                                {
+                                    Id = s.Id,
+                                    ProductName = p.Name,
+                                    ProductSize = p.Size,
+                                    ProductColor = c.Name,
+                                    Quantity = s.Quantity,
+                                    IsReadyForSale = s.IsReadyForSale,
+                                    IsDeleted = s.IsDeleted
+                                }).ToListAsync();
 
-            return result;
+            return stocks;
         }
     }
 }

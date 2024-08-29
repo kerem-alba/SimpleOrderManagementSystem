@@ -10,5 +10,6 @@ namespace DataAccess.Abstract
     public interface IOrderRepository : IEntityRepository<Order>
     {
         Task<IEnumerable<OrderDto>> GetOrderDetailsAsync();
+        Task UpdateOrderStatus(int orderId, string OrderStatus, int quantity);
     }
 }

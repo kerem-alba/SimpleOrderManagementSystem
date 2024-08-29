@@ -54,6 +54,7 @@ namespace DataAccess.Concrete.EntityFramework.Contexts
         public DbSet<Order> Orders { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Stock> Stocks { get; set; }
+        public DbSet<Color> Color { get; set; }
 
         protected IConfiguration Configuration { get; }
 

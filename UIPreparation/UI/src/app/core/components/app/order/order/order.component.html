@@ -24,7 +24,7 @@
               <table mat-table [dataSource]="dataSource" matSort>
                 <ng-container matColumnDef="orderId">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header>Order ID</th>
-                  <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+                  <td mat-cell *matCellDef="let element">{{ element.orderId }}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="customerName">
@@ -38,6 +38,20 @@
                   <th mat-header-cell *matHeaderCellDef mat-sort-header>Product Name</th>
                   <td mat-cell *matCellDef="let element">
                     {{ element.productName }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="productSize">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Product Size</th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.productSize }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="productColor">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Product Color</th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.productColor }}
                   </td>
                 </ng-container>
 
@@ -71,7 +85,7 @@
                     <button
                       mat-icon-button
                       color="primary"
-                      (confirm)="approveOrder(element.id)"
+                      (confirm)="updateOrderStatus(element.orderId, 'Approved', element.quantity)"
                       [swal]="approveSwal"
                       matTooltip="Approve"
                     >
@@ -80,7 +94,7 @@
                     <button
                       mat-icon-button
                       color="warn"
-                      (confirm)="rejectOrder(element.id)"
+                      (confirm)="updateOrderStatus(element.orderId, 'Rejected', element.quantity)"
                       [swal]="rejectSwal"
                       matTooltip="Reject"
                     >
@@ -89,11 +103,21 @@
                     <button
                       mat-icon-button
                       color="accent"
-                      (confirm)="cancelOrder(element.id)"
+                      (confirm)="updateOrderStatus(element.orderId, 'Cancelled', element.quantity)"
                       [swal]="cancelSwal"
                       matTooltip="Cancel"
                     >
                       <mat-icon>block</mat-icon>
+                    </button>
+
+                    <button
+                      mat-icon-button
+                      color="gray"
+                      (confirm)="deleteOrder(element.orderId)"
+                      [swal]="deleteSwal"
+                      matTooltip="Delete"
+                    >
+                      <mat-icon>delete</mat-icon>
                     </button>
                   </td>
                 </ng-container>
@@ -139,6 +163,16 @@
 <swal
   #cancelSwal
   title="Cancel Order"
+  icon="warning"
+  [showCancelButton]="true"
+  [confirmButtonText]="'OK'"
+  [cancelButtonText]="'Cancel'"
+>
+</swal>
+
+<swal
+  #deleteSwal
+  title="Delete Order"
   icon="warning"
   [showCancelButton]="true"
   [confirmButtonText]="'OK'"

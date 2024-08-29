@@ -8,6 +8,7 @@ using DataAccess.Abstract;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
+using DataAccess.Concrete.EntityFramework;
 
 
 namespace Business.Handlers.Orders.Commands
@@ -37,7 +38,8 @@ namespace Business.Handlers.Orders.Commands
             {
                 var orderToDelete = _orderRepository.Get(p => p.Id == request.Id);
 
-                _orderRepository.Delete(orderToDelete);
+                orderToDelete.IsDeleted = true;
+                _orderRepository.Update(orderToDelete);
                 await _orderRepository.SaveChangesAsync();
                 return new SuccessResult(Messages.Deleted);
             }

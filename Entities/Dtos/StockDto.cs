@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,8 @@ namespace Entities.Dtos
     {
         public int Id { get; set; }
         public string ProductName { get; set; }
-        public int ProductId { get; set; }
+        public SizeEnum ProductSize { get; set; }
+        public string ProductColor { get; set; }
         public int Quantity { get; set; }
         public bool IsReadyForSale { get; set; }
         public bool IsDeleted { get; set; }

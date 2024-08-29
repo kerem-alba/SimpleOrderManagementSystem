@@ -12,9 +12,7 @@ namespace Business.Helpers
         {
             CreateMap<User, CreateUserDto>().ReverseMap();
             CreateMap<User, GetUserDto>().ReverseMap();
-            CreateMap<Order, OrderDto>()
-            .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId))
-            .ReverseMap();
+            CreateMap<Order, OrderDto>().ReverseMap();
             CreateMap<Stock, StockDto>().ReverseMap();
         }
     }

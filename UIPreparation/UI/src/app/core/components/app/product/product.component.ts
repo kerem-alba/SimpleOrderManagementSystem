@@ -11,10 +11,7 @@ import { ProductService } from "./services/product.service";
 import { Color } from ".././color/model/Color";
 import { ColorService } from ".././color/service/color.service";
 
-import {
-  IDropdownSettings,
-  NgMultiSelectDropDownModule,
-} from "ng-multiselect-dropdown";
+import { IDropdownSettings, NgMultiSelectDropDownModule } from "ng-multiselect-dropdown";
 import { LookUp } from "app/core/models/LookUp";
 import { AlertifyService } from "app/core/services/alertify.service";
 import { LookUpService } from "app/core/services/LookUp.service";
@@ -25,11 +22,7 @@ import { MatPaginator, MatPaginatorModule } from "@angular/material/paginator";
 import { MatTableDataSource, MatTableModule } from "@angular/material/table";
 import { AuthService } from "../../admin/login/services/auth.service";
 import { SweetAlert2Module } from "@sweetalert2/ngx-sweetalert2";
-import {
-  MatFormField,
-  MatFormFieldModule,
-  MatLabel,
-} from "@angular/material/form-field";
+import { MatFormField, MatFormFieldModule, MatLabel } from "@angular/material/form-field";
 import { MatButtonModule, MatIconButton } from "@angular/material/button";
 import { MatInputModule } from "@angular/material/input";
 import { CommonModule } from "@angular/common";
@@ -90,14 +83,7 @@ export class ProductComponent implements AfterViewInit, OnInit {
   dataSource: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  displayedColumns: string[] = [
-    "id",
-    "name",
-    "colorId",
-    "size",
-    "update",
-    "delete",
-  ];
+  displayedColumns: string[] = ["id", "name", "colorId", "size", "update", "delete"];
 
   product: Product = new Product();
   productList: Product[] = [];
@@ -233,10 +219,7 @@ export class ProductComponent implements AfterViewInit, OnInit {
       console.log(this.productAddForm.controls); // Kontrol edilecek alanlar
       for (const control in this.productAddForm.controls) {
         if (this.productAddForm.controls[control].errors) {
-          console.log(
-            `Error in ${control}:`,
-            this.productAddForm.controls[control].errors
-          );
+          console.log(`Error in ${control}:`, this.productAddForm.controls[control].errors);
         }
       }
     }

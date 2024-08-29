@@ -89,6 +89,21 @@ namespace WebAPI.Controllers
             return BadRequest(result.Message);
         }
 
+        [Produces("application/json", "text/plain")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Product))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
+        [HttpGet("getProductWithColorAttributes")]
+        public async Task<IActionResult> GetProductWithColorAttributes()
+        {
+            var result = await Mediator.Send(new GetProductsWithColorAttributesQuery());
+            if (result.Success)
+            {
+                return Ok(result.Data);
+            }
+            return BadRequest(result.Message);
+        }
+
+
         /// <summary>
         /// Add Product.
         /// </summary>

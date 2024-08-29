@@ -5,6 +5,7 @@ import { Product } from "../models/Product";
 import { environment } from "../../../../../../environments/environment";
 import { LookUp } from "app/core/models/LookUp";
 import { Color } from "../../color/model/Color";
+import { ProductDto } from "../models/ProductDto";
 
 @Injectable({
   providedIn: "root",
@@ -59,6 +60,12 @@ export class ProductService {
     return this.httpClient.get<Product>(
       environment.getApiUrl + "/products/getProductByAttributes",
       { params: params }
+    );
+  }
+
+  getProductWithColorAttributes(): Observable<ProductDto[]> {
+    return this.httpClient.get<ProductDto[]>(
+      environment.getApiUrl + "/products/getProductWithColorAttributes"
     );
   }
 }

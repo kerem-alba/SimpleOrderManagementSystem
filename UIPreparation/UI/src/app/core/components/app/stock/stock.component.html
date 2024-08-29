@@ -34,6 +34,20 @@
                   </td>
                 </ng-container>
 
+                <ng-container matColumnDef="productSize">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Product Size</th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.productSize }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="productColor">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Product Color</th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.productColor }}
+                  </td>
+                </ng-container>
+
                 <ng-container matColumnDef="quantity">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     {{ "Quantity" | translate }}

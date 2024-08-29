@@ -63,19 +63,6 @@ namespace Business.Handlers.Orders.Commands
                     return new ErrorResult("Stock not found.");
                 }
 
-                if (request.OrderStatus == StatusEnum.Approved && (isThereOrderRecord.OrderStatus == StatusEnum.Pending || isThereOrderRecord.OrderStatus == StatusEnum.Cancelled || isThereOrderRecord.OrderStatus == StatusEnum.Rejected))
-                {
-                    if (stock.Quantity < isThereOrderRecord.Quantity)
-                    {
-                        return new ErrorResult("Insufficient stock.");
-                    }
-                    stock.Quantity -= isThereOrderRecord.Quantity;
-                }
-                else if ((request.OrderStatus == StatusEnum.Cancelled || request.OrderStatus == StatusEnum.Rejected) && isThereOrderRecord.OrderStatus == StatusEnum.Approved)
-                {
-                    stock.Quantity += isThereOrderRecord.Quantity;
-                }
-
                 isThereOrderRecord.LastUpdatedUserId = userId;
                 isThereOrderRecord.LastUpdatedDate = DateTime.Now;
                 isThereOrderRecord.OrderStatus = request.OrderStatus;

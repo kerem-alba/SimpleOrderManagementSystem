@@ -53,9 +53,6 @@ namespace Business.Handlers.Orders.Commands
 
                 if (stock.Quantity < order.Quantity)
                 {
-                    order.OrderStatus = StatusEnum.Rejected;
-                    _orderRepository.Update(order);
-                    await _orderRepository.SaveChangesAsync();
                     return new ErrorResult("Insufficient stock.");
                 }
 

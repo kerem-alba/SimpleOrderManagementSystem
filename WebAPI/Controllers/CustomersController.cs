@@ -83,7 +83,6 @@ namespace WebAPI.Controllers
         /// <summary>
         /// Update Customer.
         /// </summary>
-        /// <param name="updateCustomer"></param>
         /// <returns></returns>
         [Produces("application/json", "text/plain")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
@@ -104,7 +103,6 @@ namespace WebAPI.Controllers
         /// <summary>
         /// Delete Customer.
         /// </summary>
-        /// <param name="deleteCustomer"></param>
         /// <returns></returns>
         [Produces("application/json", "text/plain")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]

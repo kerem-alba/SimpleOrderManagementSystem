@@ -11,9 +11,9 @@
           <mat-label>Product</mat-label>
           <mat-select formControlName="productId">
             <mat-option *ngFor="let product of products" [value]="product.id">
-              {{ product.name }} Color: {{ product.color }}
-
-              Size: {{ product.size }}
+              {{ product.name }}
+              <div class="color-box" [ngStyle]="{ 'background-color': product.colorCode }"></div>
+              {{ product.size }}
             </mat-option>
           </mat-select>
         </mat-form-field>
