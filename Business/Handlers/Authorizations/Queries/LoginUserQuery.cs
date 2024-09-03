@@ -38,7 +38,7 @@ namespace Business.Handlers.Authorizations.Queries
             [LogAspect(typeof(FileLogger))]
             public async Task<IDataResult<AccessToken>> Handle(LoginUserQuery request, CancellationToken cancellationToken)
             {
-                var user = await _userRepository.GetAsync(u => u.Email == request.Email && u.Status);
+                var user = await _userRepository.GetAsync(u => u.Email == request.Email && !u.IsDeleted);
 
                 if (user == null)
                 {

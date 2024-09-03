@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { OrderService } from "../../services/order.service";
 import { AlertifyService } from "app/core/services/alertify.service";
@@ -8,6 +8,8 @@ import { ProductService } from "../../../product/services/product.service";
 import { ColorService } from "../../../color/service/color.service";
 import { StatusEnum } from "../../model/StatusEnum.enum";
 import { Color } from "../../../color/model/Color";
+import { Observable } from "rxjs";
+import { map, startWith } from "rxjs/operators";
 
 @Component({
   selector: "app-order-add-dialog",

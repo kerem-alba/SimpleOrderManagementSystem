@@ -83,6 +83,7 @@
                   <th mat-header-cell *matHeaderCellDef>Actions</th>
                   <td mat-cell *matCellDef="let element">
                     <button
+                      *ngIf="checkClaim('UpdateOrderStatusCommand')"
                       mat-icon-button
                       color="primary"
                       (confirm)="updateOrderStatus(element.orderId, 'Approved', element.quantity)"
@@ -92,6 +93,7 @@
                       <mat-icon>check_circle</mat-icon>
                     </button>
                     <button
+                      *ngIf="checkClaim('UpdateOrderStatusCommand')"
                       mat-icon-button
                       color="warn"
                       (confirm)="updateOrderStatus(element.orderId, 'Rejected', element.quantity)"
@@ -101,6 +103,7 @@
                       <mat-icon>cancel</mat-icon>
                     </button>
                     <button
+                      *ngIf="checkClaim('UpdateOrderStatusCommand')"
                       mat-icon-button
                       color="accent"
                       (confirm)="updateOrderStatus(element.orderId, 'Cancelled', element.quantity)"
@@ -111,6 +114,7 @@
                     </button>
 
                     <button
+                      *ngIf="checkClaim('DeleteOrderCommand')"
                       mat-icon-button
                       color="gray"
                       (confirm)="deleteOrder(element.orderId)"

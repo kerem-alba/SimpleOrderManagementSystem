@@ -1,11 +1,7 @@
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import {
-  HttpClient,
-  HttpClientModule,
-  HTTP_INTERCEPTORS,
-} from "@angular/common/http";
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { RouterModule } from "@angular/router";
 import { AppRoutingModule } from "./app.routing";
 import { AppComponent } from "./app.component";
@@ -35,6 +31,13 @@ import { OrderAddDialogComponent } from "./core/components/app/order/dialog/orde
 import { StockAddDialogComponent } from "./core/components/app/stock/dialog/stock-add-dialog/stock-add-dialog.component";
 import { StockUpdateDialogComponent } from "./core/components/app/stock/dialog/stock-update-dialog/stock-update-dialog.component";
 import { ColorDialogComponent } from "./core/components/app/color/color-dialog/color-dialog.component";
+import { Component, OnInit } from "@angular/core";
+import { FormControl } from "@angular/forms";
+import { Observable } from "rxjs";
+import { map, startWith } from "rxjs/operators";
+import { AsyncPipe } from "@angular/common";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 export function tokenGetter() {
   return localStorage.getItem("token");
@@ -69,6 +72,8 @@ export function tokenGetter() {
     MatInputModule,
     MatButtonModule,
     MatIconModule,
+    MatAutocompleteModule,
+    AsyncPipe,
   ],
   declarations: [
     AppComponent,

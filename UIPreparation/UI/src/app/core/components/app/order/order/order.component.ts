@@ -29,7 +29,6 @@ import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { MatGridListModule } from "@angular/material/grid-list";
 import { MatDividerModule } from "@angular/material/divider";
 import { MatIconModule } from "@angular/material/icon";
-import { data } from "jquery";
 
 @Component({
   selector: "order",

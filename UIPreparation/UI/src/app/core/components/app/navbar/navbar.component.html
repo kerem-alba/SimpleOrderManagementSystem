@@ -1,11 +1,6 @@
 <div class="container-fluid">
-  <nav
-    class="navbar navbar-dark navbar-expand-lg navbar-absolute fixed-top mb-4"
-  >
-    <div
-      class="collapse navbar-collapse d-flex justify-content-between"
-      id="navigation"
-    >
+  <nav class="navbar navbar-dark navbar-expand-lg navbar-absolute fixed-top mb-4">
+    <div class="collapse navbar-collapse d-flex justify-content-between" id="navigation">
       <div class="navbar-nav">
         <ul class="nav mt-auto">
           <li routerLinkActive="active" id="AppMenu">
@@ -32,6 +27,7 @@
 
               <li routerLinkActive="active" class="nav-item dropdown">
                 <a
+                  *ngIf="checkClaim('CreateUserCommand')"
                   class="nav-link dropdown-toggle d-flex align-items-center"
                   href="#Management"
                   id="navbarDropdown"
@@ -43,11 +39,7 @@
                   <i class="material-icons fs-5 mx-2">widgets</i>
                   <h6 class="mb-0">{{ "Management" | translate }}</h6>
                 </a>
-                <div
-                  class="dropdown-menu"
-                  id="Management"
-                  aria-labelledby="navbarDropdown"
-                >
+                <div class="dropdown-menu" id="Management" aria-labelledby="navbarDropdown">
                   <ng-container *ngFor="let menuItem of adminMenuItems">
                     <a
                       *ngIf="checkClaim(menuItem.claim)"

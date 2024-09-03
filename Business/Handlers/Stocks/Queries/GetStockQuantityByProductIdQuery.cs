@@ -32,6 +32,11 @@ namespace Business.Handlers.Stocks.Queries
             {
                 var stockList = await _stockRepository.GetListAsync();
                 var stock = stockList.FirstOrDefault(s => s.ProductId == request.ProductId);
+                if (stock == null)
+                {
+                    return new SuccessDataResult<int>(0, "Stock not found.");
+
+                }
                 return new SuccessDataResult<int>(stock.Quantity);
             }
         }
