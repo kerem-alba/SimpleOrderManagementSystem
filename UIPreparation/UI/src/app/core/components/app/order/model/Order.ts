@@ -1,14 +1,14 @@
 import { StatusEnum } from "./StatusEnum.enum";
 
 export class Order {
-  id: number;
+  id?: number;
   customerId: number;
   productId: number;
   quantity: number;
   customer?: Customer;
   product?: Product;
-  orderStatus: StatusEnum;
-  isDeleted: boolean;
+  orderStatus?: StatusEnum;
+  isDeleted?: boolean;
 }
 
 export class Customer {

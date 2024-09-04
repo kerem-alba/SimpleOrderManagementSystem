@@ -106,11 +106,9 @@ export class NavbarComponent implements OnInit {
     private sharedService: SharedService,
     public translateService: TranslateService
   ) {
-    this.clickEventSubscription = this.sharedService
-      .getChangeUserNameClickEvent()
-      .subscribe(() => {
-        this.setUserName();
-      });
+    this.clickEventSubscription = this.sharedService.getChangeUserNameClickEvent().subscribe(() => {
+      this.setUserName();
+    });
   }
 
   isLoggedIn(): boolean {
@@ -133,6 +131,8 @@ export class NavbarComponent implements OnInit {
 
     var lang = localStorage.getItem("lang") || "tr-TR";
     this.translateService.use(lang);
+
+    console.log("Admin", this.checkGroup("Admin"));
   }
 
   isMobileMenu() {
@@ -147,6 +147,12 @@ export class NavbarComponent implements OnInit {
   checkClaim(claim: string): boolean {
     return this.authService.claimGuard(claim);
   }
+
+  checkGroup(expectedGroup: string): boolean {
+    const userGroups = this.authService.getUserGroups();
+    return userGroups.includes(expectedGroup);
+  }
+
   ngOnDestroy() {
     if (!this.authService.loggedIn()) {
       this.authService.logOut();

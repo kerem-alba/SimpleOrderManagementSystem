@@ -230,6 +230,10 @@ export class ProductComponent implements AfterViewInit, OnInit {
     this.configDataTable();
   }
 
+  getRandomImageUrl(id: number): string {
+    return `https://picsum.photos/seed/${id}/200/150`;
+  }
+
   checkClaim(claim: string): boolean {
     return this.authService.claimGuard(claim);
   }

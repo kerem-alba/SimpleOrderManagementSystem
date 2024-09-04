@@ -45,7 +45,12 @@ export class AuthService {
           var decode = this.jwtHelper.decodeToken(this.storageService.getToken());
 
           var propUserName = Object.keys(decode).filter((x) => x.endsWith("/name"))[0];
+
           this.userName = decode[propUserName];
+
+          var userGroups = decode.groups || [];
+          this.storageService.setItem("userGroups", JSON.stringify(userGroups));
+
           this.sharedService.sendChangeUserNameEvent();
 
           this.router.navigateByUrl("/product");
@@ -90,13 +95,9 @@ export class AuthService {
     return !isExpired;
   }
 
-  getCurrentUserId() {
-    const token = this.storageService.getToken();
-    const decodedToken = this.jwtHelper.decodeToken(token);
-    const userId =
-      decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
-
-    return userId;
+  getUserGroups(): string[] {
+    const groups = this.storageService.getItem("userGroups");
+    return groups ? JSON.parse(groups) : [];
   }
 
   claimGuard(claim: string): boolean {

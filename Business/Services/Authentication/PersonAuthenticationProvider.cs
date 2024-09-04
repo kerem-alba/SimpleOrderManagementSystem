@@ -1,11 +1,14 @@
 ﻿using Business.Adapters.SmsService;
 using Business.Constants;
+using Business.Handlers.UserGroups.Queries;
 using Business.Services.Authentication.Model;
 using Core.Entities.Concrete;
 using Core.Utilities.Security.Jwt;
 using DataAccess.Abstract;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Business.Services.Authentication
@@ -19,12 +22,15 @@ namespace Business.Services.Authentication
 
         private readonly ITokenHelper _tokenHelper;
 
-        public PersonAuthenticationProvider(AuthenticationProviderType providerType, IUserRepository users, IMobileLoginRepository mobileLogins, ITokenHelper tokenHelper, ISmsService smsService)
+        private readonly IMediator _mediator;
+
+        public PersonAuthenticationProvider(AuthenticationProviderType providerType, IUserRepository users, IMobileLoginRepository mobileLogins, ITokenHelper tokenHelper, ISmsService smsService, IMediator mediator)
             : base(mobileLogins, smsService)
         {
             _users = users;
             ProviderType = providerType;
             _tokenHelper = tokenHelper;
+            _mediator = mediator;
         }
 
         public AuthenticationProviderType ProviderType { get; }
@@ -57,8 +63,12 @@ namespace Business.Services.Authentication
             var user = await _users.GetAsync(u => u.CitizenId == citizenId);
             user.AuthenticationProviderType = ProviderType.ToString();
 
-            var claims = _users.GetClaims(user.UserId);
-            var accessToken = _tokenHelper.CreateToken<DArchToken>(user);
+            var userGroups = await _mediator.Send(new GetUserGroupLookupByUserIdQuery { UserId = user.UserId });
+
+
+            var claims = _users.GetClaims(user.UserId)
+                .Select(c => new Claim(ClaimTypes.Role, c.Name))
+                .ToList(); var accessToken = _tokenHelper.CreateToken<DArchToken>(user, claims, userGroups.Data.Select(g => g.Label));
             accessToken.Provider = ProviderType;
             return accessToken;
         }

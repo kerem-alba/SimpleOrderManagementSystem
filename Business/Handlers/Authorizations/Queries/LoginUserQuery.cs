@@ -1,4 +1,5 @@
 ﻿using Business.Constants;
+using Business.Handlers.UserGroups.Queries;
 using Business.Services.Authentication;
 using Core.Aspects.Autofac.Logging;
 using Core.CrossCuttingConcerns.Caching;
@@ -9,7 +10,10 @@ using Core.Utilities.Security.Jwt;
 using DataAccess.Abstract;
 using MediatR;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -50,9 +54,13 @@ namespace Business.Handlers.Authorizations.Queries
                     return new ErrorDataResult<AccessToken>(Messages.PasswordError);
                 }
 
+
                 var claims = _userRepository.GetClaims(user.UserId);
 
-                var accessToken = _tokenHelper.CreateToken<DArchToken>(user);
+                var userGroups = (await _mediator.Send(new GetUserGroupLookupByUserIdQuery { UserId = user.UserId })).Data.Select(g => g.Label);
+
+
+                var accessToken = _tokenHelper.CreateToken<DArchToken>(user, claims.Select(c => new Claim(ClaimTypes.Role, c.Name)), userGroups);
                 accessToken.Claims = claims.Select(x => x.Name).ToList();
 
                 user.RefreshToken = accessToken.RefreshToken;

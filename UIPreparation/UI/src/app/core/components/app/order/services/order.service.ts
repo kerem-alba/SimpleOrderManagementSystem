@@ -22,12 +22,11 @@ export class OrderService {
 
   addOrder(order: Order): Observable<any> {
     console.log("Gönderilen ürün:", order);
-    var result = this.httpClient.post(
+    return this.httpClient.post(
       environment.getApiUrl + "/orders/",
-      { Order: order },
+      { order }, // Burada 'Order' değil 'order' küçük harfle olmalı.
       { responseType: "text" }
     );
-    return result;
   }
 
   updateOrder(order: Order): Observable<any> {

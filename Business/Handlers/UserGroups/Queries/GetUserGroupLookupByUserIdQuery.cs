@@ -6,6 +6,7 @@ using Core.Entities.Dtos;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using MediatR;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,9 +27,10 @@ namespace Business.Handlers.UserGroups.Queries
             {
                 _groupClaimRepository = groupClaimRepository;
                 _mediator = mediator;
+
             }
 
-            [SecuredOperation(Priority = 1)]
+            //[SecuredOperation(Priority = 1)]
             [CacheAspect(10)]
             [LogAspect(typeof(FileLogger))]
             public async Task<IDataResult<IEnumerable<SelectionItem>>> Handle(GetUserGroupLookupByUserIdQuery request, CancellationToken cancellationToken)

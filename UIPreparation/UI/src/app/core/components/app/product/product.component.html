@@ -36,7 +36,7 @@
           </div>
 
           <div class="card-body">
-            <mat-grid-list cols="8" rowHeight="3:6" gutterSize="12px">
+            <mat-grid-list cols="8" rowHeight="2:6" gutterSize="12px">
               <mat-grid-tile
                 class="mb-0"
                 *ngFor="let element of dataSource?.filteredData"
@@ -44,6 +44,12 @@
                 [rowspan]="1"
               >
                 <mat-card class="product-card" appearance="outlined">
+                  <img
+                    mat-card-image
+                    [src]="getRandomImageUrl(element.id)"
+                    alt="{{ element.name }}"
+                  />
+
                   <mat-card-header>
                     <div>
                       <mat-card-title>{{ element.name }}</mat-card-title>

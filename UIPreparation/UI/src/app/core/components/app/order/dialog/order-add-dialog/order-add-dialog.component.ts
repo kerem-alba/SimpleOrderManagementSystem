@@ -10,6 +10,7 @@ import { StatusEnum } from "../../model/StatusEnum.enum";
 import { Color } from "../../../color/model/Color";
 import { Observable } from "rxjs";
 import { map, startWith } from "rxjs/operators";
+import { Order } from "../../model/Order";
 
 @Component({
   selector: "app-order-add-dialog",
@@ -23,6 +24,8 @@ export class OrderAddDialogComponent implements OnInit {
   uniqueProductNames: string[] = [];
   uniqueSizes: string[] = [];
   uniqueColors: Color[] = [];
+
+  filteredCustomers: Observable<Array<{ id: number; customerName: string }>>;
 
   constructor(
     private fb: FormBuilder,
@@ -39,6 +42,11 @@ export class OrderAddDialogComponent implements OnInit {
     this.createOrderAddForm();
     this.loadCustomers();
     this.loadProducts();
+
+    this.filteredCustomers = this.orderAddForm.get("customerName").valueChanges.pipe(
+      startWith(""),
+      map((value) => this._filterCustomers(value || ""))
+    );
 
     this.orderAddForm.get("productName").valueChanges.subscribe((productName) => {
       if (productName) {
@@ -65,9 +73,16 @@ export class OrderAddDialogComponent implements OnInit {
     this.orderAddForm.get("color").disable();
   }
 
+  private _filterCustomers(value: string): Array<{ id: number; customerName: string }> {
+    const filterValue = value.toLowerCase();
+    return this.customers.filter((customer) =>
+      customer.customerName.toLowerCase().includes(filterValue)
+    );
+  }
+
   createOrderAddForm() {
     this.orderAddForm = this.fb.group({
-      customerId: ["", Validators.required],
+      customerName: ["", Validators.required],
       productName: ["", Validators.required],
       size: ["", Validators.required],
       color: ["", Validators.required],
@@ -114,13 +129,17 @@ export class OrderAddDialogComponent implements OnInit {
       const size = this.orderAddForm.get("size").value;
       const colorId = this.orderAddForm.get("color").value;
 
+      const customerName = this.orderAddForm.get("customerName").value;
+      const customer = this.customers.find((c) => c.customerName === customerName);
+      const customerId = customer ? customer.id : null;
+
       this.productService
         .getProductByAttributes(productName, size, colorId)
         .subscribe((product) => {
           const orderData = {
-            ...this.orderAddForm.value,
+            quantity: this.orderAddForm.get("quantity").value,
+            customerId: customerId,
             productId: product.id,
-            orderStatus: StatusEnum.Pending,
           };
 
           this.orderService.addOrder(orderData).subscribe(

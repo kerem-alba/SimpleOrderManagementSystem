@@ -52,7 +52,9 @@ namespace Business.Handlers.Orders.Commands
                     return new ErrorResult(Messages.UserNotFound);
                 }
 
-                var isThereOrderRecord = _orderRepository.Query().Any(u => u.ProductId == request.Order.ProductId);
+                var isThereOrderRecord = _orderRepository.Query().Any(u => u.ProductId == request.Order.ProductId 
+                && u.CustomerId == request.Order.CustomerId
+                && !u.IsDeleted);
 
                 if (isThereOrderRecord == true)
                     return new ErrorResult(Messages.NameAlreadyExist);
