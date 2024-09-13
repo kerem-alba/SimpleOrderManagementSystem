@@ -2,6 +2,12 @@
 
 This project is a basic order management system developed using the DevArchitecture framework. The system allows company employees to manage customer information and orders. Users must log in to access the system, and their permissions depend on their assigned roles.
 
+## 🚨 Screenshots Available 🚨
+You can find a detailed PDF document containing screenshots of all the application pages under the ScreenShoots.pdf file. This document provides a complete visual overview of the system’s functionality and user interface.
+
+To view the screenshots, [click here](./ScreenShoots.pdf)
+
+
 ## Role-based Access
 
 Administrator: Can manage users, roles, customers, products, and has full access to all reporting screens.
